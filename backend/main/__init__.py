@@ -24,6 +24,12 @@ def create_app():
     api.add_resource(resources.BolsonPrevioResource, '/bolson-previo/<id>')
     api.add_resource(resources.ProductosResource, '/productos')
     api.add_resource(resources.ProductoResource, '/producto/<id>')
+    api.add_resource(resources.ComprasResource, '/compras')
+    api.add_resource(resources.CompraResource, '/compra/<id>')
+    api.add_resource(resources.ClientesResource, '/clientes')
+    api.add_resource(resources.ClienteResource, '/cliente/<id>')
+    api.add_resource(resources.ProveedoresResource, '/proveedores')
+    api.add_resource(resources.ProveedorResoruce, '/proveedor/<id>')
 
     api.init_app(app)
 
