@@ -5,7 +5,7 @@ class Bolson(db.Model):
     nombre = db.Column(db.String(100), nullable = False)
     aprobado = db.Column(db.Boolean, default=False, nullable = False)
     fecha = db.Column(db.DateTime, nullable = False)
-    def _repr_(self):
+    def __repr__(self):
         return f'Bolson: {self.nombre}, {self.aprobado}, {self.fecha}'
     def to_json(self):
         bolson_json = {

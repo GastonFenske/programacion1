@@ -3,7 +3,6 @@ import os
 
 app = create_app()
 
-
 #Esto permite acceder a la propiedades de la app en cualquier parte del sis
 app.app_context().push()
 

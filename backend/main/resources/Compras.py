@@ -1,38 +1,35 @@
 from flask_restful import Resource
-from flask import request
+from flask import request, jsonify
+from .. import db
+from main.models import CompraModel
 
-COMPRAS = {
-    0: {'nombreCompra': 'compraTipo1'},
-    1: {'nombreCompra': 'compraTipo2'},
-    2: {'nombreCompra': 'compraTipo3'}
-}
 
 class Compra(Resource):
     def get(self, id):
-        if int(id) in COMPRAS:
-            return COMPRAS[int(id)]
-        return '', 404
+        compra = db.session.query(CompraModel).get_or_404(id)
+        return compra.to_json()
 
     def put(self, id):
-        if int(id) in COMPRAS:
-            compra = COMPRAS[int(id)]
-            data = request.get_json()
-            compra.update(data)
-            return compra, 201
-        return '', 404
+        compra = db.session.query(CompraModel).get_or_404(id)
+        data = request.get_json().items()
+        for key, value in data:
+            setattr(compra, key, value)
+        db.session.add(compra)
+        db.session.commit()
+        return compra.to_json(), 201
 
     def delete(self, id):
-        if int(id) in COMPRAS:
-            del COMPRAS[int(id)]
-            return '', 204
-        return '', 404
-
+        compra = db.session.query(CompraModel).get_or_404(id)
+        db.session.delete(compra)
+        db.session.commit()
+        return '', 204
 class Compras(Resource):
     def get(self):
-        return COMPRAS
+        compras = db.session.query(CompraModel).all()
+        return jsonify([compra.to_json() for compra in compras])
 
     def post(self):
-        compra = request.get_json()
-        id = int(max(COMPRAS.keys())) + 1
-        COMPRAS[id] = compra
-        return COMPRAS[id]
+        compra = CompraModel.from_json(request.get_json())
+        db.session.add(compra)
+        db.session.commit()
+        return compra.to_json(), 201
