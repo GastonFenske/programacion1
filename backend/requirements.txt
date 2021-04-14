@@ -1,4 +1,4 @@
 flask
 python-dotenv
 flask-restful
-
+flask-sqlalchemy #ORM

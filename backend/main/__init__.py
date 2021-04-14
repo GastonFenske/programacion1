@@ -4,9 +4,11 @@ from dotenv import load_dotenv
 
 from flask_restful import Api
 
-import main.resources as resources
+from flask_sqlalchemy import SQLAlchemy
 
 api = Api()
+
+db = SQLAlchemy()
 
 def create_app():
 
@@ -14,6 +16,18 @@ def create_app():
 
     load_dotenv()
 
+    PATH = os.getenv("DATABASE_PATH")
+    DB_NAME = os.getenv("DATABASE_NAME")
+    if not os.path.exists(f'{PATH}{DB_NAME}'):
+        os.mknod(f'{PATH}{DB_NAME}')
+
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:////{PATH}{DB_NAME}'
+    db.init_app(app)
+
+    #Importar los recursos
+    import main.resources as resources
     api.add_resource(resources.BolsonesResource, '/bolsones')
     api.add_resource(resources.BolsonResource, '/bolson/<id>')
     api.add_resource(resources.BolsonesVentaResource, '/bolsones-venta')
