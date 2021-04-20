@@ -27,7 +27,7 @@ class Cliente(Resource):
 class Clientes(Resource):
     def get(self):
         clientes = db.session.query(ClienteModel).all()
-        return jsonify([cliente.to_json() for cliente in clientes])
+        return jsonify({'clientes': [cliente.to_json() for cliente in clientes] })
 
     def post(self):
         cliente = ClienteModel.from_json(request.get_json())

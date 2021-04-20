@@ -16,4 +16,7 @@ class Bolsones(Resource):
     #Para obtener la lista de recursos
     def get(self,):
         bolsones = db.session.query(BolsonModel).all()
-        return jsonify([bolson.to_json() for bolson in bolsones])
+        #return jsonify({'bolsones': [bolson.to_json() for bolson in bolsones] })
+        return jsonify({
+            'bolsones': [bolson.to_json() for bolson in bolsones]
+        })
