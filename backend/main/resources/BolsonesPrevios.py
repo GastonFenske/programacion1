@@ -6,10 +6,10 @@ import datetime as dt
 import re 
 
 def filtrar_bolson_previo(bolson):
-    #Traigo la fecha del bolson que estoy iterando            
+            #Traigo la fecha del bolson que estoy iterando            
             bolsondate = bolson.fecha
 
-            #Como me trae todos los datos del objeto, filtro con una expresion regular para obtener solo el formano YYYY/MM/DD
+            #Como me trae todos los datos del objeto, filtro con una expresion regular para obtener solo el formato YYYY/MM/DD
             filter_date = re.findall(r'([0-9]*)-([0-9]*)-([0-9]*)', str(bolsondate), re.IGNORECASE)
 
             #Convierto la tupla que me devuelve la expresion regular en un str

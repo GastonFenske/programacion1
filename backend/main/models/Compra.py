@@ -12,28 +12,29 @@ class Compra(db.Model):
     bolson = db.relationship('Bolson', back_populates="compras", uselist=False, single_parent=True)
 
     def __repr__(self):
-        return f'Compra: {self.fecha_hora_compra}, {self.retirado}'
+        return f'Compra: {self.id}, {self.fecha_hora_compra}, {self.retirado}, {self.cliente.to_json()}, {self.bolson.to_json()}'
 
     def to_json(self):
         compra_json = {
             'id': self.id,
-            'fecha_hora_compra': self.fecha_hora_compra,
+            'fecha_hora_compra': str(self.fecha_hora_compra),
             'retirado': self.retirado,
             'cliente': self.cliente.to_json(),
             'bolson': self.bolson.to_json()
         }
+        return compra_json
 
     @staticmethod
     def from_json(compra_json):
         id = compra_json.get('id')
         fecha_hora_compra = compra_json.get('fecha_hora_compra')
         retirado = compra_json.get('retirado')
-        cliente = compra_json.get('clienteId')
-        bolson = compra_json.get('bolsonId')
+        clienteId = compra_json.get('clienteId')
+        bolsonId = compra_json.get('bolsonId')
         return Compra(
             id = id,
             fecha_hora_compra = fecha_hora_compra,
             retirado = retirado,
-            cliente = cliente,
-            bolson = bolson
+            clienteId = clienteId,
+            bolsonId = bolsonId
         )

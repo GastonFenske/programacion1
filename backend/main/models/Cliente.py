@@ -9,7 +9,7 @@ class Cliente(db.Model):
     compras = db.relationship("Compra", back_populates="cliente", cascade="all, delete-orphan")
 
     def __repr__(self):
-        return f'Cliente: {self.id}, {self.nombre}, {self.apellido}, {telefono}, {mail}'
+        return f'Cliente: {self.id}, {self.nombre}, {self.apellido}, {self.telefono}, {self.mail}'
 
     def to_json(self):
         cliente_json = {

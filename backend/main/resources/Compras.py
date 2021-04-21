@@ -23,10 +23,11 @@ class Compra(Resource):
         db.session.delete(compra)
         db.session.commit()
         return '', 204
+
 class Compras(Resource):
     def get(self):
         filters = request.get_json().items()
-        compras = db.session.query(CompraModel)
+        compras = db.session.query(CompraModel)  
 
         for key, value in filters:
             if key == "clienteId":
@@ -35,7 +36,6 @@ class Compras(Resource):
                 compras = compras.filter(CompraModel.bolsonId == value)
         compras = compras.all()
 
-        #compras = db.session.query(CompraModel).all()
         return jsonify({ 'compras': [compra.to_json() for compra in compras] })
 
     def post(self):

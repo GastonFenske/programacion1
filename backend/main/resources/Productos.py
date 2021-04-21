@@ -25,12 +25,22 @@ class Producto(Resource):
 
 class Productos(Resource):
     def get(self):
-        productos = db.session.query(ProductoModel).all()
-        return jsonify([producto.to_json() for producto in productos])
+        filters = request.get_json().items()
+        productos = db.session.query(ProductoModel)  
+
+        for key, value in filters:
+            if key == "clienteId":
+                productos = productos.filter(CompraModel.clienteId == value)
+        productos = productos.all()
+
+        return jsonify({ 'productos': [compra.to_json() for compra in compras] })
 
     def post(self):
         producto = ProductoModel.from_json(request.get_json())
-        db.session.add(producto)
-        db.session.commit()
+        try:
+            db.session.add(producto)
+            db.session.commit()
+        except:
+            return '', 404
         return producto.to_json()
             
