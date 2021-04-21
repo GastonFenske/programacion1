@@ -1,10 +1,11 @@
 from .. import db
+import datetime as dt
 
 class Bolson(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable = False)
     aprobado = db.Column(db.Boolean, default=False, nullable = False)
-    fecha = db.Column(db.DateTime, nullable = False)
+    fecha = db.Column(db.DateTime, default=dt.datetime.now(), nullable = False)
     compras = db.relationship("Compra", back_populates="bolson", cascade="all, delete-orphan")
     def __repr__(self):
         return f'Bolson: {self.nombre}, {self.aprobado}, {self.fecha}'
@@ -13,7 +14,7 @@ class Bolson(db.Model):
             'id': self.id,
             'nombre': self.nombre,
             'aprobado': self.aprobado,
-            'fecha': self.fecha
+            'fecha': str(self.fecha)
         }
         return bolson_json
     
