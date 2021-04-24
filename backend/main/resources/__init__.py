@@ -15,3 +15,5 @@ from .Clientes import Cliente as ClienteResource
 from .Clientes import Clientes as ClientesResource
 from .Proveedores import Proveedor as ProveedorResoruce
 from .Proveedores import Proveedores as ProveedoresResource
+from .ProductosBolsones import ProductoBolson as ProductoBolsonResource
+from .ProductosBolsones import ProductosBolsones as ProductosBolsonesResource

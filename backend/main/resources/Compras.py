@@ -6,8 +6,11 @@ from main.models import CompraModel
 
 class Compra(Resource):
     def get(self, id):
-        compra = db.session.query(CompraModel).get_or_404(id)
-        return compra.to_json()
+        try:
+            compra = db.session.query(CompraModel).get_or_404(id)
+            return compra.to_json()
+        except:
+            return '', 404
 
     def put(self, id):
         compra = db.session.query(CompraModel).get_or_404(id)
