@@ -7,22 +7,31 @@ from main.models import ProveedorModel
 class Proveedor(Resource):
     def get(self, id):
         proveedor = db.session.query(ProveedorModel).get_or_404(id)
-        return proveedor.to_json()
+        try:
+            return proveedor.to_json()
+        except:
+            return '', 404
 
     def delete(self, id):
         proveedor = db.session.query(ProveedorModel).get_or_404(id)
-        db.session.delete(proveedor)
-        db.session.commit()
-        return '', 204
+        try:
+            db.session.delete(proveedor)
+            db.session.commit()
+            return '', 204
+        except:
+            return '', 404
 
     def put(self, id):
         proveedor = db.session.query(ProveedorModel).get_or_404(id)
         data = request.get_json().items()
         for key, value in data:
             setattr(proveedor, key, value)
-        db.session.add(proveedor)
-        db.session.commit()
-        return proveedor.to_json(), 201
+        try:
+            db.session.add(proveedor)
+            db.session.commit()
+            return proveedor.to_json(), 201
+        except:
+            return '', 404
 
 class Proveedores(Resource):
     def get(self):

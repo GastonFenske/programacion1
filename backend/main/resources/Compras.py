@@ -17,15 +17,21 @@ class Compra(Resource):
         data = request.get_json().items()
         for key, value in data:
             setattr(compra, key, value)
-        db.session.add(compra)
-        db.session.commit()
-        return compra.to_json(), 201
+        try:
+            db.session.add(compra)
+            db.session.commit()
+            return compra.to_json(), 201
+        except:
+            return '', 404
 
     def delete(self, id):
         compra = db.session.query(CompraModel).get_or_404(id)
-        db.session.delete(compra)
-        db.session.commit()
-        return '', 204
+        try:
+            db.session.delete(compra)
+            db.session.commit()
+            return '', 204
+        except:
+            return '', 404
 
 class Compras(Resource):
     def get(self):

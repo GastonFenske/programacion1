@@ -6,22 +6,31 @@ from main.models import ProductoModel
 class Producto(Resource):
     def get(self, id):
         producto = db.session.query(ProductoModel).get_or_404(id)
-        return producto.to_json()
+        try:
+            return producto.to_json()
+        except:
+            return '', 404
 
     def delete(self, id):
         producto = db.session.query(ProductoModel).get_or_404(id)
-        db.session.delete(producto)
-        db.session.commit()
-        return '', 204
+        try:
+            db.session.delete(producto)
+            db.session.commit()
+            return '', 204
+        except:
+            return '', 404
 
     def put(self, id):
         producto = db.session.query(ProductoModel).get_or_404(id)
         data = request.get_json().items()
         for key, value in data:
             setattr(producto, key, value)
-        db.session.add(producto)
-        db.session.commit()
-        return producto.to_json(), 201
+        try:
+            db.session.add(producto)
+            db.session.commit()
+            return producto.to_json(), 201
+        except:
+            return '', 404
 
 class Productos(Resource):
     def get(self):
