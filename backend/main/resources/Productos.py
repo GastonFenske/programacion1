@@ -34,16 +34,22 @@ class Producto(Resource):
 
 class Productos(Resource):
     def get(self):
-        filters = request.get_json().items()
-        productos = db.session.query(ProductoModel)  
+        try:
+            filters = request.get_json().items()
+        
+            productos = db.session.query(ProductoModel)  
 
-        for key, value in filters:
-            if key == "clienteId":
-                productos = productos.filter(CompraModel.clienteId == value)
-        productos = productos.all()
+            for key, value in filters:
+                if key == "proveedorId":
+                    productos = productos.filter(ProductoModel.proveedorId == value)
+            productos = productos.all()
 
-        return jsonify({ 'productos': [compra.to_json() for compra in compras] })
+            return jsonify({ 'productos': [producto.to_json() for producto in productos] })
 
+        except:
+            productos = db.session.query(ProductoModel).all()
+            return jsonify({ 'productos': [producto.to_json() for producto in productos] })
+    
     def post(self):
         producto = ProductoModel.from_json(request.get_json())
         try:

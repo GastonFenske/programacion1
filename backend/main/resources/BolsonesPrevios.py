@@ -21,7 +21,7 @@ def filtrar_bolson_previo(bolson):
             #Obtengo la fecha actual
             today_date = dt.datetime.now()
             
-            #Obtengo el atributo fecha del bolson que estoy iterando
+            #Obtengo el atributo dia del bolson que estoy iterando
             last_day = bolson_date_object.day
             
             #Hago la cuenta para ver si el bolson es de la semana pasada, restando el dia de hoy con el dia del bolson iterado

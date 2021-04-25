@@ -35,17 +35,22 @@ class Compra(Resource):
 
 class Compras(Resource):
     def get(self):
-        filters = request.get_json().items()
-        compras = db.session.query(CompraModel)  
+        try:
+            filters = request.get_json().items()
+            compras = db.session.query(CompraModel)  
 
-        for key, value in filters:
-            if key == "clienteId":
-                compras = compras.filter(CompraModel.clienteId == value)
-            elif key == "bolsonId":
-                compras = compras.filter(CompraModel.bolsonId == value)
-        compras = compras.all()
+            for key, value in filters:
+                if key == "clienteId":
+                    compras = compras.filter(CompraModel.clienteId == value)
+                elif key == "bolsonId":
+                    compras = compras.filter(CompraModel.bolsonId == value)
+            compras = compras.all()
 
-        return jsonify({ 'compras': [compra.to_json() for compra in compras] })
+            return jsonify({ 'compras': [compra.to_json() for compra in compras] })
+        
+        except:
+            compras = db.session.query(CompraModel).all()
+            return jsonify({ 'compras': [compra.to_json() for compra in compras] })
 
     def post(self):
         compra = CompraModel.from_json(request.get_json())
