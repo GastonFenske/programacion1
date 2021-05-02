@@ -5,8 +5,25 @@ from main.models import ProductoBolsonModel
 
 class ProductosBolsones(Resource):
     def get(self):
-        productosbolsones = db.session.query(ProductoBolsonModel).all()
-        return jsonify({ 'productosbolsones': [productobolson.to_json() for productobolson in productosbolsones] })
+        page = 1
+        per_page = 10
+        productosbolsones = db.session.query(ProductoBolsonModel)
+        if request.get_json():
+            filters = request.get_json().items()
+            for key, value in filters:
+                if key == 'page':
+                    page = int(value)
+                elif key == 'per_page':
+                    per_page = int(value)
+        productosbolsones = productosbolsones.paginate(page, per_page, True, 30)
+        
+        return jsonify({
+            'productosbolsones': [productobolson.to_json() for productobolson in productosbolsones.items],
+            'total': productosbolsones.total,
+            'pages': productosbolsones.pages,
+            'page': page
+        })
+
 
     def post(self):
         productobolson = ProductoBolsonModel.from_json(request.get_json())

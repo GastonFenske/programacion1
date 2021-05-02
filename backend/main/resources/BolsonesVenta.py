@@ -32,9 +32,3 @@ class BolsonesVenta(Resource):
             'pages': bolsones.pages,
             'page': page
         })
-
-            
-            #bolsones = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 1).all()
-            #return jsonify({
-            #    'bolsonesventa': [bolson.to_json() for bolson in bolsones] 
-            #})

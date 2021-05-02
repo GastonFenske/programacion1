@@ -27,7 +27,7 @@ class BolsonesPrevios(Resource):
                     page = int(value)
                 elif key == 'per_page':
                     per_page = int(value)
-        print(bolsones)
+
         bolsones = bolsones.paginate(page, per_page, True, 30)
 
         return jsonify({

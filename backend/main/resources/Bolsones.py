@@ -15,8 +15,22 @@ class Bolson(Resource):
 class Bolsones(Resource):
     #Para obtener la lista de recursos
     def get(self):
-        bolsones = db.session.query(BolsonModel).all()
-        #return jsonify({'bolsones': [bolson.to_json() for bolson in bolsones] })
+
+        page = 1
+        per_page = 10
+        bolsones = db.session.query(BolsonModel)
+        if request.get_json():
+            filters = request.get_json().items()
+            for key, value in filters:
+                if key == 'page':
+                    page = int(value)
+                elif key == 'per_page':
+                    per_page = int(value)
+        bolsones = bolsones.paginate(page, per_page, True, 30)
+
         return jsonify({
-            'bolsones': [bolson.to_json() for bolson in bolsones]
+            'bolsones': [bolson.to_json() for bolson in bolsones.items],
+            'total': bolsones.total,
+            'pages': bolsones.pages,
+            'page': page 
         })

@@ -35,22 +35,31 @@ class Compra(Resource):
 
 class Compras(Resource):
     def get(self):
-        try:
-            filters = request.get_json().items()
-            compras = db.session.query(CompraModel)  
 
+        page = 1
+        per_page = 10
+        compras = db.session.query(CompraModel)  
+        if request.get_json():
+            filters = request.get_json().items()
             for key, value in filters:
                 if key == "clienteId":
                     compras = compras.filter(CompraModel.clienteId == value)
                 elif key == "bolsonId":
                     compras = compras.filter(CompraModel.bolsonId == value)
-            compras = compras.all()
+                elif key == 'page':
+                    page = int(value)
+                elif key == 'per_page':
+                    per_page = int(value)
 
-            return jsonify({ 'compras': [compra.to_json() for compra in compras] })
+        compras = compras.paginate(page, per_page, True, 30)
+
+        return jsonify({
+            'compras': [compra.to_json() for compra in compras.items],
+            'total': compras.total,
+            'pages': compras.pages,
+            'page': page
+        })
         
-        except:
-            compras = db.session.query(CompraModel).all()
-            return jsonify({ 'compras': [compra.to_json() for compra in compras] })
 
     def post(self):
         compra = CompraModel.from_json(request.get_json())
