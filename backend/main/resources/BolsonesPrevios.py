@@ -18,7 +18,7 @@ class BolsonesPrevios(Resource):
         page = 1
         per_page = 10
         
-        bolsones = db.session.query(BolsonModel).filter(BolsonModel.fecha <= date)
+        bolsones = db.session.query(BolsonModel).filter(BolsonModel.fecha <= self.date)
 
         if request.get_json():
             filters = request.get_json().items()
