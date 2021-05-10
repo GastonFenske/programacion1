@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
-from main.models import ProveedorModel
+from main.models import UsuarioModel
 
 
 class Proveedor(Resource):
@@ -37,7 +37,7 @@ class Proveedores(Resource):
     def get(self):
         page = 1
         per_page = 10
-        proveedores = db.session.query(ProveedorModel)
+        proveedores = db.session.query(UsuarioModel).filter(UsuarioModel.role == 'proveedor')
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
@@ -55,7 +55,7 @@ class Proveedores(Resource):
         })
 
     def post(self):
-        proveedor = ProveedorModel.from_json(request.get_json())
+        proveedor = UsuarioModel.from_json(request.get_json())
         try:
             db.session.add(proveedor)
             db.session.commit()

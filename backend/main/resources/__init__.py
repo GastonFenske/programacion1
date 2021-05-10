@@ -11,9 +11,11 @@ from .Productos import Producto as ProductoResource
 from .Productos import Productos as ProductosResource
 from .Compras import Compra as CompraResource
 from .Compras import Compras as ComprasResource
-from .Clientes import Cliente as ClienteResource
-from .Clientes import Clientes as ClientesResource
-from .Proveedores import Proveedor as ProveedorResoruce
+#from .Clientes import Cliente as ClienteResource
+#from .Clientes import Clientes as ClientesResource
+#from .Proveedores import Proveedor as ProveedorResoruce
 from .Proveedores import Proveedores as ProveedoresResource
 from .ProductosBolsones import ProductoBolson as ProductoBolsonResource
 from .ProductosBolsones import ProductosBolsones as ProductosBolsonesResource
+from .Usuarios import Usuario as UsuarioResource
+from .Usuarios import Usuarios as UsuariosResource

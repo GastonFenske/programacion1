@@ -6,9 +6,13 @@ from flask_restful import Api
 
 from flask_sqlalchemy import SQLAlchemy
 
+from flask_jwt_extended import JWTManager
+
 api = Api()
 
 db = SQLAlchemy()
+
+jwt = JWTManager()
 
 def create_app():
 
@@ -40,13 +44,24 @@ def create_app():
     api.add_resource(resources.ProductoResource, '/producto/<id>')
     api.add_resource(resources.ComprasResource, '/compras')
     api.add_resource(resources.CompraResource, '/compra/<id>')
-    api.add_resource(resources.ClientesResource, '/clientes')
-    api.add_resource(resources.ClienteResource, '/cliente/<id>')
+    #api.add_resource(resources.ClientesResource, '/clientes')
+    #api.add_resource(resources.ClienteResource, '/cliente/<id>')
     api.add_resource(resources.ProveedoresResource, '/proveedores')
-    api.add_resource(resources.ProveedorResoruce, '/proveedor/<id>')
+    #api.add_resource(resources.ProveedorResoruce, '/proveedor/<id>')
     api.add_resource(resources.ProductosBolsonesResource, '/productos-bolsones')
     api.add_resource(resources.ProductoBolsonResource, '/producto-bolson/<id>')
+    api.add_resource(resources.UsuariosResource, '/usuarios')
+    api.add_resource(resources.UsuarioResource, '/usuario/<id>')
 
     api.init_app(app)
+
+    #cargar clave secreta
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+    #cargar tiempo de expiracion de tokens
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES'))
+    jwt.init_app(app)
+
+    from main.auth import routes
+    app.register_blueprint(auth.routes.auth)
 
     return app

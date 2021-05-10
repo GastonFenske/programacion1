@@ -1,11 +1,12 @@
 from .. import db
-from . import ProveedorModel
+#from . import ProveedorModel
+#from . import UsuarioModel
 
 class Producto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
-    proveedorId = db.Column(db.Integer, db.ForeignKey('proveedor.id'), nullable=False)
-    proveedor = db.relationship('Proveedor', back_populates="productos", uselist=False, single_parent=True)
+    usuarioId = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    usuario = db.relationship('Usuario', back_populates="productos", uselist=False, single_parent=True)
     productosbolsones = db.relationship("ProductoBolson", back_populates="producto", cascade="all, delete-orphan")
 
     def __repr__(self):
@@ -14,7 +15,7 @@ class Producto(db.Model):
         producto_json = {
             'id': self.id,
             'nombre': self.nombre,
-            'proveedor': self.proveedor.to_json()
+            'usuario': self.usuario.to_json()
         }
         return producto_json
     
@@ -22,9 +23,9 @@ class Producto(db.Model):
     def from_json(producto_json):
         id = producto_json.get('id')
         nombre = producto_json.get('nombre')
-        proveedorId = producto_json.get('proveedorId')
+        usuarioId = producto_json.get('usuarioId')
         return Producto(
             id = id,
             nombre = nombre,
-            proveedorId = proveedorId
+            usuarioId = usuarioId
         )    
