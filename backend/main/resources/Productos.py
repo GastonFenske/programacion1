@@ -72,4 +72,5 @@ class Productos(Resource):
         except:
             return '', 404
         return producto.to_json()
+        
             
