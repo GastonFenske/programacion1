@@ -9,8 +9,8 @@ class Usuario(db.Model):
     mail = db.Column(db.String(64), nullable=False, unique=False, index=True)
     password = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(15), nullable=False, default="cliente")
-    productos = db.relationship("Producto", back_populates="usuario", cascade="all, delete-orphan")
-    compras = db.relationship("Compra", back_populates="usuario", cascade="all, delete-orphan")
+    productos = db.relationship('Producto', back_populates="usuario", cascade="all, delete-orphan")
+    compras = db.relationship('Compra', back_populates="usuario", cascade="all, delete-orphan")
 
     @property
     def plain_password(self):

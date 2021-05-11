@@ -2,10 +2,14 @@ from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
 from main.models import BolsonModel
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from main.auth.decorators import admin_required
+from main.auth.decorators import proveedor_or_admin_required
 
 
 
 class BolsonesPendientes(Resource):
+    @proveedor_or_admin_required
     def get(self):
         page = 1
         per_page = 10
@@ -27,6 +31,7 @@ class BolsonesPendientes(Resource):
             'page': page
         })
 
+    @admin_required
     def post(self):
         bolsonpendiente = BolsonModel.from_json(request.get_json())
         db.session.add(bolsonpendiente)
@@ -34,6 +39,7 @@ class BolsonesPendientes(Resource):
         return bolsonpendiente.to_json(), 201
 
 class BolsonPendiente(Resource):
+    @proveedor_or_admin_required
     def get(self, id):
         bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
         if bolsonpendiente.aprobado == 0:
@@ -41,6 +47,7 @@ class BolsonPendiente(Resource):
         else:
             return '', 404
 
+    @admin_required
     def delete(self, id):
         bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
         if bolsonpendiente.aprobado == 0:
@@ -50,6 +57,7 @@ class BolsonPendiente(Resource):
         else:
             return '', 404
     
+    @admin_required
     def put(self, id):
         bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
         data = request.get_json().items()

@@ -3,6 +3,7 @@ import datetime as dt
 #from . import ClienteModel, BolsonModel
 from . import BolsonModel
 
+
 class Compra(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fecha_hora_compra = db.Column(db.DateTime, default=dt.datetime.now(), nullable=False)
@@ -13,14 +14,15 @@ class Compra(db.Model):
     bolson = db.relationship('Bolson', back_populates="compras", uselist=False, single_parent=True)
 
     def __repr__(self):
-        return f'Compra: {self.id}, {self.fecha_hora_compra}, {self.retirado}, {self.usuario.to_json()}, {self.bolson.to_json()}'
+        #return f'Compra: {self.id}, {self.fecha_hora_compra}, {self.retirado}, {self.usuario.to_json()}, {self.bolson.to_json()}'
+        return f'Compra: {self.id}, {self.fecha_hora_compra}, {self.retirado}, {self.bolson.to_json()}'
 
     def to_json(self):
         compra_json = {
             'id': self.id,
             'fecha_hora_compra': str(self.fecha_hora_compra),
             'retirado': self.retirado,
-            'cliente': self.usuario.to_json(),
+            'usuario': self.usuario.to_json(),
             'bolson': self.bolson.to_json()
         }
         return compra_json

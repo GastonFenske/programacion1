@@ -2,9 +2,12 @@ from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
 from main.models import CompraModel
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from main.auth.decorators import admin_required, cliente_or_admin_required
 
 
 class Compra(Resource):
+    @cliente_or_admin_required
     def get(self, id):
         try:
             compra = db.session.query(CompraModel).get_or_404(id)
@@ -12,6 +15,7 @@ class Compra(Resource):
         except:
             return '', 404
 
+    @admin_required
     def put(self, id):
         compra = db.session.query(CompraModel).get_or_404(id)
         data = request.get_json().items()
@@ -24,6 +28,7 @@ class Compra(Resource):
         except:
             return '', 404
 
+    @admin_required
     def delete(self, id):
         compra = db.session.query(CompraModel).get_or_404(id)
         try:
@@ -34,16 +39,16 @@ class Compra(Resource):
             return '', 404
 
 class Compras(Resource):
+    @admin_required
     def get(self):
-
         page = 1
         per_page = 10
         compras = db.session.query(CompraModel)  
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
-                if key == "clienteId":
-                    compras = compras.filter(CompraModel.clienteId == value)
+                if key == "usuarioId":
+                    compras = compras.filter(CompraModel.usuarioId == value)
                 elif key == "bolsonId":
                     compras = compras.filter(CompraModel.bolsonId == value)
                 elif key == 'page':
@@ -60,12 +65,14 @@ class Compras(Resource):
             'page': page
         })
         
-
+    @jwt_required()
     def post(self):
         compra = CompraModel.from_json(request.get_json())
+        current_user = get_jwt_identity()
+        compra.usuarioId = current_user
         try:
             db.session.add(compra)
             db.session.commit()
         except:
-            return '', 404
+            return 'Esto no anda', 404
         return compra.to_json(), 201
