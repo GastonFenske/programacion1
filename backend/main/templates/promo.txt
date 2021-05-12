@@ -1,0 +1,6 @@
+Hola {{usuario.nombre}} {{usuario.apellido}}!
+
+Estas son las ofertas semanales:
+{% for bolson in bolsones %}
+    {{ bolson }}
+{% endfor %}

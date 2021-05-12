@@ -3,3 +3,4 @@ python-dotenv
 flask-restful
 flask-sqlalchemy #ORM
 flask-jwt-extended
+flask-mail

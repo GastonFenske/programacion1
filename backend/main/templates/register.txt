@@ -1,0 +1,8 @@
+Bienvenido {{usuario.nombre}} {{usuario.apellido}}
+
+Gracias por registrarte en nuestro sistema
+
+Con nuestro servicio podras:
+
+- Vender tus bolsones y productos
+- Comprar bolsones y productos
