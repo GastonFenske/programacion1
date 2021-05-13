@@ -17,7 +17,8 @@ def login():
         data = {
             'id': str(usuario.id),
             'mail': usuario.mail,
-            'access_token': access_token
+            'access_token': access_token,
+            'role': str(usuario.role)
         }
         return data, 200
     else:

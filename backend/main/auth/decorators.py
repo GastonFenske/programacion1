@@ -60,13 +60,16 @@ def cliente_required(fn):
 
 @jwt.user_identity_loader
 def user_identity_lookup(usuario):
-    return usuario.id
+    return {
+        'usuarioId': usuario.id,
+        'role': usuario.role
+    }
 
 @jwt.additional_claims_loader
 def add_claims_to_access_token(usuario):
     claims = {
-        'role': usuario.role,
         'id': usuario.id,
+        'role': usuario.role,
         'mail': usuario.mail
     }
     return claims

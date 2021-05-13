@@ -1,9 +1,11 @@
+from flask.globals import current_app
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
 from main.models import ProductoModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from main.auth.decorators import proveedor_required, proveedor_or_admin_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 class Producto(Resource):
     @jwt_required(optional=True)
@@ -16,26 +18,34 @@ class Producto(Resource):
 
     @proveedor_or_admin_required
     def delete(self, id):
+        current_user = get_jwt_identity()
         producto = db.session.query(ProductoModel).get_or_404(id)
-        try:
-            db.session.delete(producto)
-            db.session.commit()
-            return '', 204
-        except:
-            return '', 404
+        if current_user['usuarioId'] == producto.usuarioId or current_user['role'] == 'admin':
+            try:
+                db.session.delete(producto)
+                db.session.commit()
+                return '', 204
+            except:
+                return '', 404
+        else:
+            return 'Unauthorized', 401
 
     @proveedor_required
     def put(self, id):
+        current_user = get_jwt_identity()
         producto = db.session.query(ProductoModel).get_or_404(id)
-        data = request.get_json().items()
-        for key, value in data:
-            setattr(producto, key, value)
-        try:
-            db.session.add(producto)
-            db.session.commit()
-            return producto.to_json(), 201
-        except:
-            return '', 404
+        if current_user['usuarioId'] == producto.usuarioId:
+            data = request.get_json().items()
+            for key, value in data:
+                setattr(producto, key, value)
+            try:
+                db.session.add(producto)
+                db.session.commit()
+                return producto.to_json(), 201
+            except:
+                return '', 404
+        else:
+            return 'Unauthorized', 401
 
 class Productos(Resource):
     @proveedor_or_admin_required

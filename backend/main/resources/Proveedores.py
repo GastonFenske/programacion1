@@ -1,3 +1,5 @@
+from flask.globals import current_app
+from flask_jwt_extended.utils import get_current_user
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
@@ -9,12 +11,16 @@ from main.auth.decorators import admin_required, proveedor_or_admin_required
 class Proveedor(Resource):
     @proveedor_or_admin_required
     def get(self, id):
+        current_user = get_jwt_identity()
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
         if proveedor.role == 'proveedor':
-            try:
-                return proveedor.to_json()
-            except:
-                return '', 404
+            if current_user['usuarioId'] == proveedor.id or current_user['role'] == 'admin':
+                try:
+                    return proveedor.to_json()
+                except:
+                    return '', 404
+            else:
+                return 'Unauthorized', 401
         else:
             return 'proveedor not found', 404
 

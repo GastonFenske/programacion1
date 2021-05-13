@@ -11,7 +11,7 @@ def sendMail(to, subject, template, **kwargs):
     try:
 
         msg.body = render_template(f'{template}.txt', **kwargs)
-        #msg.html = render_template(f'{template}.html', **kwargs)
+        msg.html = render_template(f'{template}.html', **kwargs)
 
         result = mailsender.send(msg)
 
@@ -25,12 +25,13 @@ mail = Blueprint('mail', __name__, url_prefix='/mail')
 @mail.route('/promo', methods=['POST'])
 @admin_required
 def promo():
-    print('Hola')
     usuarios = db.session.query(UsuarioModel).filter(UsuarioModel.role == 'cliente').all()
     bolsonesVenta = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 1).all()
-
-    for usuario in usuarios:
-        sent = sendMail([usuario.mail], "Ofertas de la semana", 'promo', usuario = usuario, bolsones = [bolson.nombre for bolson in bolsonesVenta])
-    
-    return 'Mails evnaidos', 200
+    try:
+        for usuario in usuarios:
+            sent = sendMail([usuario.mail], "Ofertas de la semana", 'promo', usuario = usuario, bolsones = [bolson.nombre for bolson in bolsonesVenta])
+    except SMTPException as e:
+        print(str(e))
+        return "Mail deliver failed"
+    return 'mails sent', 200
 

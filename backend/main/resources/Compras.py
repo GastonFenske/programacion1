@@ -4,14 +4,19 @@ from .. import db
 from main.models import CompraModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from main.auth.decorators import admin_required, cliente_or_admin_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class Compra(Resource):
     @cliente_or_admin_required
     def get(self, id):
+        current_user = get_jwt_identity()
         try:
             compra = db.session.query(CompraModel).get_or_404(id)
-            return compra.to_json()
+            if current_user['usuarioId'] == compra.usuarioId or current_user['role'] == 'admin':
+                return compra.to_json()
+            else:
+                return 'Unauthorized', 401
         except:
             return '', 404
 

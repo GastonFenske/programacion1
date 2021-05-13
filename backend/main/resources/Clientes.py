@@ -1,8 +1,10 @@
+from flask.globals import current_app
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
 from main.models import UsuarioModel
-from main.auth.decorators import admin_required, cliente_required, cliente_or_admin_required
+from main.auth.decorators import admin_required, cliente_required, cliente_or_admin_required 
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class Cliente(Resource):
@@ -19,30 +21,38 @@ class Cliente(Resource):
 
     @cliente_or_admin_required
     def delete(self, id):
+        current_user = get_jwt_identity()
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         if cliente.role == 'cliente':
-            try:
-                db.session.delete(cliente)
-                db.session.commit()
-                return '', 204
-            except:
-                return '', 404
+            if current_user['usuarioId'] == cliente.id or current_user['role'] == 'admin':
+                try:
+                    db.session.delete(cliente)
+                    db.session.commit()
+                    return '', 204
+                except:
+                    return '', 404
+            else:
+                return 'Unauthorized', 401
         else:
             return 'cliente not found', 404
 
     @cliente_required
     def put(self, id):
+        current_user = get_jwt_identity()
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         if cliente.role == 'cliente':
-            data = request.get_json().items()
-            for key, value in data:
-                setattr(cliente, key, value)
-            try:
-                db.session.add(cliente)
-                db.session.commit()
-                return cliente.to_json(), 201
-            except:
-                return '', 404
+            if current_user['usuarioId'] == cliente.id:
+                data = request.get_json().items()
+                for key, value in data:
+                    setattr(cliente, key, value)
+                try:
+                    db.session.add(cliente)
+                    db.session.commit()
+                    return cliente.to_json(), 201
+                except:
+                    return '', 404
+            else:
+                return 'Unauthorized', 401
         else:
             return 'cliente not found', 404
 
