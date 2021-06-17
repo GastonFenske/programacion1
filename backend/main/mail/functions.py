@@ -11,7 +11,9 @@ def sendMail(to, subject, template, **kwargs):
     try:
 
         msg.body = render_template(f'{template}.txt', **kwargs)
-        msg.html = render_template(f'{template}.html', **kwargs)
+
+        #msg.html = render_template(f'{template}.html', **kwargs)
+
 
         result = mailsender.send(msg)
 
