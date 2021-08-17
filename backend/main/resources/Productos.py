@@ -4,7 +4,7 @@ from flask import request, jsonify
 from .. import db
 from main.models import ProductoModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from main.auth.decorators import proveedor_required, proveedor_or_admin_required
+from main.auth.decorators import role_required
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 class Producto(Resource):
@@ -16,7 +16,7 @@ class Producto(Resource):
         except:
             return '', 404
 
-    @proveedor_or_admin_required
+    @role_required(roles=['admin', 'proveedor'])
     def delete(self, id):
         current_user = get_jwt_identity()
         producto = db.session.query(ProductoModel).get_or_404(id)
@@ -30,7 +30,7 @@ class Producto(Resource):
         else:
             return 'Unauthorized', 401
 
-    @proveedor_required
+    @role_required(roles=['admin', 'proveedor'])
     def put(self, id):
         current_user = get_jwt_identity()
         producto = db.session.query(ProductoModel).get_or_404(id)
@@ -48,7 +48,7 @@ class Producto(Resource):
             return 'Unauthorized', 401
 
 class Productos(Resource):
-    @proveedor_or_admin_required
+    @role_required(roles=['admin', 'proveedor'])
     def get(self):
         page = 1
         per_page = 10
@@ -73,7 +73,7 @@ class Productos(Resource):
         })
 
 
-    @proveedor_required
+    @role_required(roles=['proveedor'])
     def post(self):
         producto = ProductoModel.from_json(request.get_json())
         try:

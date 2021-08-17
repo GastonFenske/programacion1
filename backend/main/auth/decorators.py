@@ -1,62 +1,36 @@
+import functools
 from .. import jwt
 from flask import jsonify
 from flask_jwt_extended import verify_jwt_in_request, get_jwt
 from functools import wraps
 
-def admin_required(fn):
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        verify_jwt_in_request()
-        claims = get_jwt()
-        if claims['role'] == 'admin':
-            return fn(*args, **kwargs)
-        else:
-            return 'Only admins can access', 403
-    return wrapper
+def role_required(roles):
+    def decorator(function):
+        def wrapper(*args, **kwargs):
+            #Verificar que el JWT es correcto
+            verify_jwt_in_request()
+            #Obtengo los claims
+            claims = get_jwt()
+            #Verificar que el rol sea uno de los permitidos por la ruta
+            if claims['role'] in roles:
+                #Ejecuto la funcion
+                return function(*args, **kwargs)
+            else:
+                return 'Rol not allowed', 403
+        return wrapper
+    return decorator
 
-def proveedor_required(fn):
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        verify_jwt_in_request()
-        claims = get_jwt()
-        if claims['role'] == 'proveedor':
-            return fn(*args, **kwargs)
-        else:
-            return 'Only proveedores can access', 403
-    return wrapper
+#def admin_required(fn):
+#    @wraps(fn)
+#    def wrapper(*args, **kwargs):
+#        verify_jwt_in_request()
+#        claims = get_jwt()
+#        if claims['role'] == 'admin':
+#            return fn(*args, **kwargs)
+#        else:
+#            return 'Only admins can access', 403
+#    return wrapper
 
-def proveedor_or_admin_required(fn):
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        verify_jwt_in_request()
-        claims = get_jwt()
-        if claims['role'] == 'proveedor' or claims['role'] == 'admin':
-            return fn(*args, **kwargs)
-        else:
-            return 'Only admins or proveedores can access', 403
-    return wrapper
-
-def cliente_or_admin_required(fn):
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        verify_jwt_in_request()
-        claims = get_jwt()
-        if claims['role'] == 'cliente' or claims['role'] == 'admin':
-            return fn(*args, **kwargs)
-        else:
-            return 'Only admins or clientes can access', 403
-    return wrapper
-
-def cliente_required(fn):
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        verify_jwt_in_request()
-        claims = get_jwt()
-        if claims['role'] == 'cliente':
-            return fn(*args, **kwargs)
-        else:
-            return 'Only cliente can accesss', 403
-    return wrapper
 
 @jwt.user_identity_loader
 def user_identity_lookup(usuario):

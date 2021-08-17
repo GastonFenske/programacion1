@@ -5,11 +5,11 @@ from flask import request, jsonify
 from .. import db
 from main.models import UsuarioModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from main.auth.decorators import admin_required, proveedor_or_admin_required
+from main.auth.decorators import role_required
 
 
 class Proveedor(Resource):
-    @proveedor_or_admin_required
+    @role_required(roles=['admin', 'proveedor'])
     def get(self, id):
         current_user = get_jwt_identity()
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
@@ -24,7 +24,7 @@ class Proveedor(Resource):
         else:
             return 'proveedor not found', 404
 
-    @admin_required
+    @role_required(roles=['admin'])
     def delete(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
         if proveedor.role == 'proveedor':
@@ -37,7 +37,7 @@ class Proveedor(Resource):
         else:
             return 'proveedor not found', 404
 
-    @admin_required
+    @role_required(roles=['admin'])
     def put(self, id):
         proveedor = db.session.query(UsuarioModel).get_or_404(id)
         if proveedor.role == 'proveedor':
@@ -75,7 +75,7 @@ class Proveedores(Resource):
             'page': page
         })
 
-    @admin_required
+    @role_required(roles=['admin'])
     def post(self):
         proveedor = UsuarioModel.from_json(request.get_json())
         proveedor.role = 'proveedor'

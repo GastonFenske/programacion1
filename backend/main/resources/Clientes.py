@@ -3,12 +3,12 @@ from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
 from main.models import UsuarioModel
-from main.auth.decorators import admin_required, cliente_required, cliente_or_admin_required 
+from main.auth.decorators import role_required 
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class Cliente(Resource):
-    @admin_required
+    @role_required(roles=['admin'])
     def get(self, id):
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         if cliente.role == 'cliente':
@@ -19,7 +19,7 @@ class Cliente(Resource):
         else:
             return 'cliente not found', 404
 
-    @cliente_or_admin_required
+    @role_required(roles=['admin', 'cliente'])
     def delete(self, id):
         current_user = get_jwt_identity()
         cliente = db.session.query(UsuarioModel).get_or_404(id)
@@ -36,7 +36,7 @@ class Cliente(Resource):
         else:
             return 'cliente not found', 404
 
-    @cliente_required
+    @role_required(roles=['cliente'])
     def put(self, id):
         current_user = get_jwt_identity()
         cliente = db.session.query(UsuarioModel).get_or_404(id)
@@ -57,7 +57,7 @@ class Cliente(Resource):
             return 'cliente not found', 404
 
 class Clientes(Resource):
-    @admin_required
+    @role_required(roles=['admin'])
     def get(self):
         page = 1
         per_page = 10
