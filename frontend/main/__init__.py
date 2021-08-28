@@ -8,4 +8,10 @@ def create_app():
 
     load_dotenv()
 
+
+    from main.routes import main, admin, proveedor
+    app.register_blueprint(routes.main.main)
+    app.register_blueprint(routes.admin.admin)
+    app.register_blueprint(routes.proveedor.proveedor)
+
     return app
