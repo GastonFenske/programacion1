@@ -8,6 +8,7 @@
     --secondaryHover: #252525;
     --forms: #1C1C1C;
     --warning: #ff9f32;
+    --warningHover: #f18f1e; 
     --danger: #DC3838;
     --provider: #1fb506;
     --contrast: #ffffff;
@@ -73,6 +74,12 @@ header:before{
     right: 0;
     background-color: rgba(0, 0, 0, 0.3);
 }
+.headerr{
+    background-image: url(img/fondo.jpg);
+    background-position: center;
+    background-size: cover;
+    height: 100vh!important;
+}
 .info{
     position: relative;
 }
@@ -88,6 +95,12 @@ header:before{
 }
 .btn-primary:hover{
     background-color: var(--primaryHover)!important;
+}
+.btn-warning{
+    background-color: var(--warning)!important;
+}
+.btn-warning:hover{
+    background-color: var(--warningHover)!important;
 }
 .btn-own {
     padding: 0.5em 1em;
@@ -172,4 +185,21 @@ header:before{
 }
 .page-link{
     padding: 0.5em 1em;
+}
+.tabla {
+    border-collapse: collapse!important;
+}
+th, td {
+    text-align: left;
+    padding: 8px
+}
+tr{
+    background-color: #696969;
+}
+tr:nth-child(even){
+    background-color: #3e3e3e;
+}
+th {
+    background-color: var(--forms);
+    color: white;
 }

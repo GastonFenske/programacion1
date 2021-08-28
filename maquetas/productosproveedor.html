@@ -15,29 +15,26 @@
     <title>Admin logueado</title>
   </head>
 
-  <body class="bg-dark">
+  <body class="bg-primary">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
-      <div class="container pt-2 pb-2">
-        <a class="navbar-brand" href="#">Bolsones Store</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+        <div class="container pt-2 pb-2">
+          <a class="navbar-brand" href="#">Bolsones Store</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
               <li class="nav-item">
-                  <a href="#" class="nav-link active me-3">Panel admin</a>
+                <a class="nav-link active me-3 link-designated" href="#">Ver bolsones</a>
               </li>
-            <li class="nav-item">
-              <a class="nav-link active me-3 link-designated" href="#">Ver bolsones</a>
-            </li>
-            <li class="nav-item">
-              <a class="btn btn-primary py-2 px-4" href="#" tabindex="-1" aria-disabled="true">Logout</a>
-            </li>
-          </ul>
+              <li class="nav-item">
+                <a class="btn btn-contrast py-2 px-4" href="#" tabindex="-1" aria-disabled="true">Logout</a>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
 
     <div class="container">
 
@@ -52,10 +49,10 @@
         
     
                                 <div class="d-flex flex-column">
-                                    <label for="exampleInputEmail1" class="form-label">Filtrar usuario by Id</label>
+                                    <label for="exampleInputEmail1" class="form-label">Filtrar producto by Id</label>
                                     <div class="d-flex">
                                         <input type="number" class="form-control me-3 rounded" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa un id">
-                                        <button type="submit" class="btn btn-primary px-3 rounded-3">
+                                        <button type="submit" class="btn btn-contrast px-3 rounded-3">
                                             <i class="fas fa-search"></i>
                                         </button>
                                     </div>
@@ -75,45 +72,48 @@
         <div class="row mt-4">
 
             <table class="tabla text-white">
-                <thead class="">
-                  <tr class="">
-                    <th scope="col">Id</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Accion</th>
-                  </tr>
+                <thead class="bg-info p-g">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Accion</th>
+                    </tr>
                 </thead>
-                <tbody>
+
+                <tbody class="">
                   <tr>
                     <td scope="row">1</th>
-                    <td>Gaston Fenske</td>
-                    <td>Cliente</td>
+                    <td>Naranjas</td>
                     <td>
-                        <a href="#" class="btn btn-success">
-                            Proveedor
-                            <i class="fas fa-plus-circle ms-2"></i>
+                        <a href="#" class="btn btn-danger">
+                            Eliminar
+                        </a>
+                        <a href="#" class="btn btn-warning text-white">
+                            Editar
                         </a>
                     </td>
                   </tr>
                   <tr>
                     <td scope="row">2</th>
-                    <td>Belen Fenske</td>
-                    <td>Proveedor</td>
+                    <td>Manzanas</td>
                     <td>
                         <a href="#" class="btn btn-danger">
-                            Proveedor
-                            <i class="fas fa-minus-circle ms-2"></i>
+                            Eliminar
+                        </a>
+                        <a href="#" class="btn btn-warning text-white">
+                            Editar
                         </a>
                     </td>
                   </tr>
                   <tr>
                     <td scope="row">3</th>
-                    <td>Marcos Gonzales</td>
-                    <td>Cliente</td>
+                    <td>Tomates</td>
                     <td>
-                        <a href="#" class="btn btn-success">
-                            Proveedor
-                            <i class="fas fa-plus-circle ms-2"></i>
+                        <a href="#" class="btn btn-danger">
+                            Eliminar
+                        </a>
+                        <a href="#" class="btn btn-warning text-white">
+                            Editar
                         </a>
                     </td>
                   </tr>
