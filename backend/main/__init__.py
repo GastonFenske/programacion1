@@ -10,6 +10,8 @@ from flask_jwt_extended import JWTManager
 
 from flask_mail import Mail
 
+from flask_cors import CORS
+
 api = Api()
 
 db = SQLAlchemy()
@@ -80,5 +82,10 @@ def create_app():
     app.config['FLASKY_MAIL_SENDER'] = os.getenv('FLASKY_MAIL_SENDER')
 
     mailsender.init_app(app)
+
+    #Permitir solicitudes de otros origenes
+    cors = CORS(app, support_credentials=True)
+    app.config['CORS_HEADERS'] = 'Content-Type'
+    cors = CORS(app, resources={r"*": {"origins": "*"}})
 
     return app

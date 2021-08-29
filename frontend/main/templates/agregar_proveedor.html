@@ -20,7 +20,7 @@
                 <a href="{{ url_for('admin.home') }}" class="nav-link active me-3">Panel admin</a>
             </li>
           <li class="nav-item">
-            <a class="nav-link active me-3 link-designated" href="#">Ver bolsones</a>
+            <a class="nav-link active me-3 link-designated" href="{{url_for('bolsones.venta', page = 1)}}">Ver bolsones</a>
           </li>
           <li class="nav-item">
             <a class="btn btn-primary py-2 px-4" href="{{ url_for('main.logout') }}" tabindex="-1" aria-disabled="true">Logout</a>
@@ -65,7 +65,7 @@
 
       <div class="row mt-4">
 
-          <table class="table table-dark table-striped bg-secondary">
+          <table class="tabla text-white bg-secondary">
               <thead class="">
                 <tr class="">
                   <th scope="col">Id</th>
@@ -76,7 +76,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">1</th>
+                  <td scope="row">1</th>
                   <td>Gaston Fenske</td>
                   <td>Cliente</td>
                   <td>
@@ -87,7 +87,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <th scope="row">2</th>
+                  <td scope="row">2</th>
                   <td>Belen Fenske</td>
                   <td>Proveedor</td>
                   <td>
@@ -98,7 +98,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <th scope="row">3</th>
+                  <td scope="row">3</th>
                   <td>Marcos Gonzales</td>
                   <td>Cliente</td>
                   <td>
@@ -117,7 +117,7 @@
       <div class="container my-5 p-0">
           <nav aria-label="" class="">
               <ul class="pagination">
-                <li class="page-item disabled">
+                <li class="page-item">
                   <a class="page-link bg-forms pag-back" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
                 </li>
                 <li class="page-item"><a class="page-link bg-contrast" href="#">1</a></li>

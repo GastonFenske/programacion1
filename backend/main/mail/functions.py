@@ -3,7 +3,7 @@ from flask import current_app, render_template, Blueprint
 from flask_mail import Message
 from smtplib import SMTPException
 from main.models import UsuarioModel, BolsonModel
-from main.auth.decorators import admin_required
+from main.auth.decorators import role_required
 
 def sendMail(to, subject, template, **kwargs):
 
@@ -25,7 +25,7 @@ def sendMail(to, subject, template, **kwargs):
 mail = Blueprint('mail', __name__, url_prefix='/mail')
 
 @mail.route('/promo', methods=['POST'])
-@admin_required
+@role_required(roles=["admin"])
 def promo():
     usuarios = db.session.query(UsuarioModel).filter(UsuarioModel.role == 'cliente').all()
     bolsonesVenta = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 1).all()

@@ -1,0 +1,114 @@
+{% extends 'main.html' %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+      <div class="container pt-2 pb-2">
+        <a class="navbar-brand" href="{{ url_for('main.index') }}">Bolsones Store</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active me-3 link-designated" href="{{ url_for('main.login') }}">Iniciar sesion</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-primary py-2 px-4" href="{{ url_for('main.register') }}" tabindex="-1" aria-disabled="true">Registrarse</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+  </nav>
+          
+
+
+<div class="container">
+
+  <h1>Bolsones en venta</h1>
+
+  {% for bolson in bolsones %}
+  <div class="bg-forms p-4 rounded mt-3 row">
+
+        <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-3 p-0">
+          <img src="{{ bolson['imagen'] }}" alt="" class="img-bolson">
+        </div>
+
+        <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-9 p-0">
+          <h2>{{ bolson['nombre'] }}</h2>
+
+          <div class="mt-4">
+              <p>{{ bolson['descripcion'] }}</p>
+              <p>Fecha: {{ bolson['fecha'] }}</p>
+
+              <div class="d-flex mt-4">
+                <a href="#">
+                    <div class="btn-own bg-danger me-2">Ver mas</div>
+                </a>
+
+                <a href="#">
+                    <div class="btn-own bg-success">Reservar</div>
+                </a>
+              </div>
+          
+          </div>
+
+        </div>
+  </div>
+  {% endfor %}
+
+  
+
+     
+    <div class="my-5">
+      <nav aria-label="...">
+          <ul class="pagination m-0">
+            {% if page > 1 %}
+              <li class="page-item">
+                <a class="page-link bg-forms pag-back" href="{{url_for('bolsones.venta', page = page - 1)}}" tabindex="-1" aria-disabled="true">Anterior</a>
+              </li>
+            {% else %}
+              <a class="page-link bg-forms pag-back" href="{{url_for('bolsones.venta', page = pages)}}" tabindex="-1" aria-disabled="true">Anterior</a>
+            {% endif %}
+
+            {% for i in range(pages) %}
+              {% if i+1 == page %}
+                <li class="page-item"><a class="page-link bg-contrast" href="{{url_for('bolsones.venta', page = i + 1)}}">{{i+1}}</a></li>
+              {% else %}
+                <li class="page-item"><a class="page-link bg-forms" href="{{url_for('bolsones.venta', page = i + 1)}}">{{i+1}}</a></li>
+              {% endif %}
+            {% endfor %}
+
+
+                <li class="page-item">
+
+                  {% if page + 1 <= pages %}
+
+                    <a class="page-link bg-forms pag-next" href="{{url_for('bolsones.venta', page = page + 1)}}">Siguiente</a>
+
+                  {% else %}
+                    <a class="page-link bg-forms pag-next" href="{{url_for('bolsones.venta', page = 1)}}">Siguiente</a>
+
+                  {% endif %}
+
+                </li>
+          </ul>
+
+        </nav>
+  </div>
+
+</div>
+
+
+
+
+
+
+</div>   
+
+{% endblock %}

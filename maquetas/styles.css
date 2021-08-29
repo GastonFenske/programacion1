@@ -203,3 +203,10 @@ th {
     background-color: var(--forms);
     color: white;
 }
+.d-flex{
+    padding: 0;
+}
+.img-bolson {
+    max-height: 12em!important;
+    border-radius: 2em;
+}

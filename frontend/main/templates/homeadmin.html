@@ -16,7 +16,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
           <li class="nav-item">
-            <a class="nav-link active me-3 link-designated" href="#">Ver bolsones</a>
+            <a class="nav-link active me-3 link-designated" href="{{url_for('bolsones.venta', page = 1)}}">Ver bolsones</a>
           </li>
           <li class="nav-item">
             <a class="btn btn-primary py-2 px-4" href="{{ url_for('main.logout') }}" tabindex="-1" aria-disabled="true">Logout</a>
