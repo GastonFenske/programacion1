@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <!-- <link href="open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500;600&display=swap" rel="stylesheet">
+
+    <title>Admin logueado</title>
+  </head>
+
+  <body class="bg-secondary">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+      <div class="container pt-2 pb-2">
+        <a class="navbar-brand" href="#">Bolsones Store</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active me-3 link-designated" href="#">Iniciar sesion</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-primary py-2 px-4" href="#" tabindex="-1" aria-disabled="true">Registrarse</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+  </nav>
+            
+
+
+  <div class="container">
+
+    <div class="row d-flex justify-content-center my-3">
+        <div class="bg-forms p-5 rounded col-md-4 col-10">
+            <div class="d-flex justify-content-center">
+                <h3>Agregar bolson</h3>
+            </div>
+            <form class="pt-3">
+                <div class="mb-4">
+                  <label for="" class="form-label">Nombre del bolson</label>
+                  <input type="text" class="form-control" id="" aria-describedby="" placeholder="Ingresa el nombre del bolson">
+                </div>
+
+                <div class="mb-4">
+                    <label for="" class="form-label">Descripcion</label>
+                    <input type="text" class="form-control" id="" aria-describedby="" placeholder="Ingresa el nombre del bolson">
+                  </div>
+
+                <div class="form-switch d-flex justify-content-between align-items-center mb-4">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Listo para la venta</label>
+
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                      </label>
+                  </div>
+
+                  <div class="mt-4" id="products-container">
+
+                    <div id="child">
+                        <label for="disabledSelect" class="form-label">Producto #1</label>
+                        <select id="disabledSelect" class="form-select input">
+                          <option>Selecionar producto</option>
+                          <option value="">Naranjas</option>
+                          <option value="">Manzanas</option>
+                        </select>
+                    </div>
+
+                  </div>
+
+                <div class="d-grid mt-4">
+                    <button type="button" class="btn btn-success mt-4" id="add-bolson">
+                        Agregar producto
+                        <i class="fas fa-plus-circle ms-1"></i>
+                    </button>
+                </div>
+
+                <div class="d-grid">
+                    <button type="button" class="btn btn-danger mt-4" id="remove-bolson">
+                        Quitar ultimo producto
+                        <i class="fas fa-minus-circle ms-1"></i>
+                    </button>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary">Agregar bolson</button>
+                </div>
+
+
+              </form>
+        </div>
+    </div>
+
+
+
+
+  </div>   
+           
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+    <script src="../scripts.js"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
+    -->
+
+    <script src="https://kit.fontawesome.com/9789745169.js" crossorigin="anonymous"></script>
+
+  </body>
+</html>

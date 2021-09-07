@@ -11,7 +11,9 @@ class ProductosBolsones(Resource):
         if request.get_json():
             filters = request.get_json().items()
             for key, value in filters:
-                if key == 'page':
+                if key == 'bolsonId':
+                    productosbolsones = productosbolsones.filter(ProductoBolsonModel.bolsonId == value)
+                elif key == 'page':
                     page = int(value)
                 elif key == 'per_page':
                     per_page = int(value)

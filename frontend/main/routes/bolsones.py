@@ -1,6 +1,8 @@
 from flask import redirect, render_template, url_for, Blueprint, current_app
 import requests, json
 
+from requests.api import head
+
 bolsones = Blueprint('bolsones', __name__, url_prefix='/bolsones')
 
 
@@ -18,5 +20,33 @@ def venta(page):
     pages = json.loads(r.text)["pages"]
 
     return render_template('bolsoneshome.html', bg_color='bg-secondary', title='Bolsones', bolsones = bolsones, page = page, pages = pages)
+
+@bolsones.route('/ver/<int:id>')
+def ver(id):
+
+    r = requests.get(f'{current_app.config["API_URL"]}/bolson-venta/{id}', headers={"content-type": "applications/json"}, json={})
+
+    bolson = json.loads(r.text)
+    bolsonId = bolson["id"]
+    nombre = bolson["nombre"]
+    fecha = bolson["fecha"]
+    imagen = bolson["imagen"]
+    descripcion = bolson["descripcion"]
+
+    json_api = {
+	    "bolsonId": 2
+    }
+
+    #print(json_api)
+    r = requests.get(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "applications/json"}, json = json_api)
+    print(r)
+
+    productos = json.loads(r.text)["productosbolsones"]
+    #for producto in productos:
+    #    print(producto)
+
+    return render_template('verbolson.html', title = f'{nombre}', bg_color = "bg-secondary", 
+    nombre = nombre, imagen = imagen, descripcion = descripcion, productos = productos
+    )
 
 

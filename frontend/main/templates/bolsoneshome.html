@@ -47,7 +47,7 @@
               <p>Fecha: {{ bolson['fecha'] }}</p>
 
               <div class="d-flex mt-4">
-                <a href="#">
+                <a href="{{url_for('bolsones.ver', id = bolson['id'] )}}">
                     <div class="btn-own bg-danger me-2">Ver mas</div>
                 </a>
 
