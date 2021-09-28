@@ -1,8 +1,6 @@
 from flask import redirect, render_template, url_for, Blueprint, current_app
 import requests, json
 
-from requests.api import head
-
 bolsones = Blueprint('bolsones', __name__, url_prefix='/bolsones')
 
 
@@ -34,16 +32,13 @@ def ver(id):
     descripcion = bolson["descripcion"]
 
     json_api = {
-	    "bolsonId": 2
+	    "bolsonId": int(id)
     }
 
-    #print(json_api)
-    r = requests.get(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "applications/json"}, json = json_api)
-    print(r)
+    r = requests.get(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json = json_api)
+
 
     productos = json.loads(r.text)["productosbolsones"]
-    #for producto in productos:
-    #    print(producto)
 
     return render_template('verbolson.html', title = f'{nombre}', bg_color = "bg-secondary", 
     nombre = nombre, imagen = imagen, descripcion = descripcion, productos = productos

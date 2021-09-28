@@ -1,0 +1,113 @@
+{% extends 'main.html' %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+      <div class="container pt-2 pb-2">
+        <a class="navbar-brand" href="#">Bolsones Store</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active me-3" href="">usuario@gmail.com</a>
+            </li>
+            <!-- <li class="nav-item d-flex align-items-center">
+                <a href="#">
+                    <i class="fas fa-user-circle contrast fs-2 me-3"></i>
+                </a>
+            </li> -->
+
+            <li class="nav-item dropdown">
+                <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle contrast fs-2 me-3"></i>
+                </a>
+                <ul class="dropdown-menu my-3" aria-labelledby="navbarDropdown">
+                  <li>
+
+                      <a class="dropdown-item d-grid" href="#">
+                          <div class="">Editar perfil</div>
+                      </a>
+
+
+                    </li>
+                  <li>
+                      <a class="dropdown-item d-grid" href="#">
+                        <div class="">Ver mis compras</div>
+                      </a>
+                    </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                      <a class="dropdown-item d-grid" href="#">
+                        <div class="">Ver mas</div>
+                      </a>
+                    </li>
+                </ul>
+              </li>
+
+            <li class="nav-item">
+              <a class="btn btn-primary py-2 px-4" href="#" tabindex="-1" aria-disabled="true">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+        
+
+        <div class="row bg-forms p-5 d-flex justify-content-center">
+
+            <div class="col-md-4 bg-info p-3">
+    
+                <div class="d-flex flex-column">
+    
+                    <img src="https://i.ibb.co/sVSPwkg/bolson-frutas-jpg.jpg" alt="" class="img-bolson">
+
+                    <div class="botones">
+                        <div class="btn btn-success d-grid">
+                            <div class="d-flex justify-content-center">
+                                <p class="fs-3">Retirado</p>
+                                <i class="fas fa-check-circle ms-2 fs-3"></i>
+                            </div>
+
+                        </div>
+                        <!-- <div class="btn btn-danger d-grid mt-3 p-3">Ver usuario</div> -->
+                    </div>
+
+    
+                </div>
+    
+            </div>
+
+            <div class="col-md-4 bg-warning p-3">
+
+                <h3>Bolson de frutas</h3>
+                <p>Fecha compra: 27/02/2020</p>
+
+                <br/>
+
+                <p>El bolson contiene:</p>
+
+                <ul>
+                    <li><p>12 naranjas</p></li>
+                    <li><p>12 manzanas</p></li>
+                    <li><p>12 peras</p></li>
+                    <li><p>4 limones</p></li>
+                </ul>
+
+            </div>
+    
+        </div>
+
+    </div>
+
+
+{% endblock %}

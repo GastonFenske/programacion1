@@ -1,0 +1,122 @@
+{% extends 'main.html' %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+    <div class="container pt-2 pb-2">
+      <a class="navbar-brand" href="{{ url_for('admin.home') }}">Bolsones Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+            <li class="nav-item">
+                <a href="{{ url_for('admin.home') }}" class="nav-link active me-3">Panel admin</a>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link active me-3 link-designated" href="{{url_for('bolsones.venta', page = 1)}}">Ver bolsones</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary py-2 px-4" href="{{ url_for('main.logout') }}" tabindex="-1" aria-disabled="true">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" id="divPrincipal">
+
+    <div class="row">
+
+        <div class="d-flex justify-content-center">
+
+            <div class="col-md-4">
+                <form class="">
+    
+
+                            <div class="d-flex flex-column">
+                                <label for="exampleInputEmail1" class="form-label">Filtrar usuario by Id</label>
+                                <div class="d-flex">
+                                    <input type="number" class="form-control me-3 rounded" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa un id">
+                                    <button type="submit" class="btn btn-primary px-3 rounded-3">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+
+    
+                </form>
+    
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="row mt-4">
+
+        <table class="tabla text-white bg-secondary">
+            <thead class="">
+              <tr class="">
+                <th scope="col">Id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Status</th>
+                <th scope="col">Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+            
+            {% for usuario in usuarios %}
+              {% if usuario['role'] != 'admin' %}
+                <tr>
+                  <td scope="row">{{ usuario['id'] }}</th>
+                  <td>{{ usuario['nombre'] + ' ' + usuario['apellido'] }}</td>
+                  <td>{{ usuario['role'] }}</td>
+                  <td>
+                      {% if usuario['role'] == 'cliente' %}
+                        <a href="{{ url_for('admin.add_proveedor', id = usuario['id']) }}" class="btn btn-success">
+                            Proveedor
+                            <i class="fas fa-plus-circle ms-2"></i>
+                        </a>
+                      {% else %}
+                        <a href="{{ url_for('admin.remove_proveedor', id = usuario['id']) }}" class="btn btn-danger">
+                          Proveedor
+                          <i class="fas fa-minus-circle ms-2"></i>
+                        </a>
+                      {% endif %}
+                  </td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+
+
+            </tbody>
+          </table>
+
+          <button class="btn btn-primary" id="btn-pro">Click</div>
+
+    </div>
+
+
+  </div>
+
+  <!-- <div class="container mt-5">
+    <button class="btn btn-primary" id="btn-refresh">
+        Refrescar datos sin resfrecar la pagina
+    </button>
+  </div> -->
+  
+
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+{% endblock %}

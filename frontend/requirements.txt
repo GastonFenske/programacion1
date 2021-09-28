@@ -5,3 +5,4 @@ requests
 flask-login
 flask_wtf
 email_validator
+PyJWT

@@ -76,52 +76,30 @@
               </thead>
               <tbody>
               
-              {% for usuario in usuarios %}
-                {% if usuario['role'] != 'admin' %}
+
                   <tr>
-                    <td scope="row">{{ usuario['id'] }}</th>
-                    <td>{{ usuario['nombre'] + ' ' + usuario['apellido'] }}</td>
-                    <td>{{ usuario['role'] }}</td>
+                    <td scope="row">1</th>
+                    <td>Bolson de carnes</td>
                     <td>
-                        {% if usuario['role'] == 'cliente' %}
-                          <a href="{{ url_for('admin.add_proveedor', id = usuario['id']) }}" class="btn btn-success">
-                              Proveedor
-                              <i class="fas fa-plus-circle ms-2"></i>
-                          </a>
-                        {% else %}
-                          <a href="{{ url_for('admin.remove_proveedor', id = usuario['id']) }}" class="btn btn-danger">
-                            Proveedor
-                            <i class="fas fa-minus-circle ms-2"></i>
-                          </a>
-                        {% endif %}
+                        <div class="btn btn-success">
+                            En venta
+                            <i class="fas fa-check-circle ms-2"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <a href="#" class="btn btn-primary">
+                                Editar
+                            </a>
+                            <a href="#" class="btn btn-danger">
+                                Eliminar
+                            </a>
+
+                        </div>
                     </td>
                   </tr>
-                {% endif %}
-              {% endfor %}
 
 
-                <!-- <tr>
-                  <td scope="row">2</th>
-                  <td>Belen Fenske</td>
-                  <td>Proveedor</td>
-                  <td>
-                      <a href="#" class="btn btn-danger">
-                          Proveedor
-                          <i class="fas fa-minus-circle ms-2"></i>
-                      </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td scope="row">3</th>
-                  <td>Marcos Gonzales</td>
-                  <td>Cliente</td>
-                  <td>
-                      <a href="#" class="btn btn-success">
-                          Proveedor
-                          <i class="fas fa-plus-circle ms-2"></i>
-                      </a>
-                  </td>
-                </tr> -->
 
               </tbody>
             </table>

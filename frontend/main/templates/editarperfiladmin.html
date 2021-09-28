@@ -1,0 +1,99 @@
+{% extends 'main.html' %}
+{% from 'macros/form_macros.html' import show_field, show_submit %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+    <div class="container pt-2 pb-2">
+      <a class="navbar-brand" href="{{ url_for('admin.home') }}">Bolsones Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+            <li class="nav-item">
+                <a href="{{ url_for('admin.home') }}" class="nav-link active me-3">Panel admin</a>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link active me-3 link-designated" href="{{url_for('bolsones.venta', page = 1)}}">Ver bolsones</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary py-2 px-4" href="{{ url_for('main.logout') }}" tabindex="-1" aria-disabled="true">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div class="row d-flex justify-content-center my-5">
+        <div class="bg-forms p-5 rounded col-md-4 col-10">
+            <div class="d-flex justify-content-center">
+                <h3>Editar perfil</h3>
+            </div>
+            <form class="pt-3">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <div class="mb-3">
+                  <!-- <label for="exampleInputEmail1" class="form-label">Nombre</label>
+                  <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu nombre" value="Gaston"> -->
+                  {{ show_field(form.nombre, class='form-control', value='Gaston') }}
+                </div>
+
+                <div class="mb-3">
+                    <!-- <label for="exampleInputEmail1" class="form-label">Apellido</label>
+                    <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu apellido" value="Fenske"> -->
+                    {{ show_field(form.apellido, class='form-control', value='Fenske') }}
+                </div>
+
+                <div class="mb-3">
+                    <!-- <label for="exampleInputEmail1" class="form-label">Telefono</label>
+                    <input type="phone-number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu telefono" value="2600000000"> -->
+                    {{ show_field(form.telefono, class='form-control', value='2604267316') }}
+                </div>
+
+                <div class="mb-3">
+                    <!-- <label for="exampleInputEmail1" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu email" value="usuario@gmail.com"> -->
+                    {{ show_field(form.email, class='form-control', value='s.fenske@alumno.um.edu.ar') }}
+                </div>
+
+                <div class="mb-3">
+                  <!-- <label for="exampleInputPassword1" class="form-label">Contraseña nueva</label>
+                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Ingresa tu contraseña"> -->
+                  {{ show_field(form.new_password, class='form-control', placeholder='Ingrese su nueva contraseña') }}
+                </div>
+
+                <div class="mb-3">
+                    <!-- <label for="exampleInputEmail1" class="form-label">Confirma tu nueva contraseña</label>
+                    <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Confirma tu contraseña"> -->
+                    {{ show_field(form.new_confirm, class='form-control', placeholder='Confirme su nueva contraseña') }}
+                </div>
+
+                <div class="mb-3">
+                    <!-- <label for="exampleInputEmail1" class="form-label">Contraseña actual</label>
+                    <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu contraseña actual"> -->
+                    {{ show_field(form.current_password, class='form-control', placeholder='Ingrese su contraseña actual') }}
+                </div>
+
+                <div class="d-grid pt-3">
+                    <!-- <button type="submit" class="btn btn-primary">Actualizar datos</button> -->
+                    {{ show_submit(form.submit, class='btn btn-primary') }}
+                </div>
+
+              </form>
+        </div>
+    </div>
+
+
+  </div>
+
+
+{% endblock %}

@@ -277,3 +277,6 @@ th {
     max-height: 12em!important;
     border-radius: 2em;
 }
+.btn{
+    border: 0!important;
+}
