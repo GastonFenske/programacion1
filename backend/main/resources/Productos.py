@@ -48,7 +48,7 @@ class Producto(Resource):
             return 'Unauthorized', 401
 
 class Productos(Resource):
-    @role_required(roles=['admin', 'proveedor'])
+    # @role_required(roles=['admin', 'proveedor'])
     def get(self):
         page = 1
         per_page = 10
@@ -73,7 +73,7 @@ class Productos(Resource):
         })
 
 
-    @role_required(roles=['proveedor'])
+    # @role_required(roles=['proveedor'])
     def post(self):
         producto = ProductoModel.from_json(request.get_json())
         try:

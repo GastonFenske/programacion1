@@ -33,6 +33,7 @@ input, .input{
     border: none!important;
     color: var(--contrast)!important;
 }
+
 /* input:checked{
     background-color: var(--primary)!important;
     width: 4em!important;

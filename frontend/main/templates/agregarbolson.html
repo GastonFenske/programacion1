@@ -1,0 +1,196 @@
+{% extends 'main.html' %}
+{% from 'macros/form_macros.html' import show_field_no_label, show_submit, show_switch %}
+
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+    <div class="container pt-2 pb-2">
+      <a class="navbar-brand" href="{{ url_for('admin.home') }}">Bolsones Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+            <li class="nav-item">
+                <a href="{{ url_for('admin.home') }}" class="nav-link active me-3">Panel admin</a>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link active me-3 link-designated" href="{{url_for('bolsones.venta', page = 1)}}">Ver bolsones</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary py-2 px-4" href="{{ url_for('main.logout') }}" tabindex="-1" aria-disabled="true">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div class="main bg-forms p-5 rounded my-5">
+
+
+        <div class="row d-flex justify-content-center">
+    
+            <div class="col-md-12 d-flex justify-content-center mb-3">
+                <h3>Agregar bolson</h3>
+            </div>
+    
+        </div>
+    
+        <form class="row d-flex justify-content-center">
+    
+            <!-- <div class="bg-secondary"> -->
+    
+    
+    
+            <div class="col-md-6">
+    
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <div class="form-switch d-flex justify-content-between align-items-center mb-3 pt-4">
+                  <!-- <label class="form-check-label" for="flexSwitchCheckChecked">Listo para la venta</label>
+
+                  <label class="switch">
+                      <input type="checkbox">
+                      <span class="slider round"></span>
+                    </label> -->
+                    {{ show_switch(form.venta, type="checkbox") }}
+                </div>
+    
+                <div class="mb-3">
+                    <label for="">Nombre</label>
+                    {{ show_field_no_label(form.nombre, class='form-control', placeholder='Nombre del bolson') }}
+                </div>
+    
+                <div class="mb-3">
+                    <label for="">Descripcion</label>
+                    {{ show_field_no_label(form.descripcion, class='form-control', placeholder='Descripcion del bolson') }}
+                </div>
+
+
+    
+                <div class="mb-3">
+                    <label for="">Producto #1</label>
+                        {{ show_field_no_label(form.producto, class='form-control form-select input') }}
+                </div>
+
+
+
+                <!-- <div class="d-grid mb-3">
+                    <button type="button" class="btn btn-success mt-4" id="add-bolson">
+                        Agregar producto
+                        <i class="fas fa-plus-circle ms-1"></i>
+                    </button>
+                  </div> -->
+    
+            </div>
+    
+            <div class="col-md-6">
+
+              <div class="mb-3" id="producto2">
+                <label for="">Producto #2</label>
+                <div class="d-flex">
+
+                    {{ show_field_no_label(form.producto2, class='form-control form-select input') }}
+                    <button type="button" class="btn btn-secondary ms-3 px-4" id="trash-2">
+                        <i class="fas fa-trash-alt"></i>
+                    </button> 
+                </div>
+            </div>
+
+              <div class="d-grid mb-3" id="add-producto2">
+                <button type="button" class="btn btn-success mt-4" id="add-bolson">
+                    Agregar producto
+                    <i class="fas fa-plus-circle ms-1"></i>
+                </button>
+              </div>
+    
+    
+                <div class="mb-3" id="producto3">
+                    <label for="">Producto #3</label>
+                    <div class="d-flex">
+
+                        {{ show_field_no_label(form.producto3, class='form-control form-select input') }}
+                        <button type="button" class="btn btn-secondary ms-3 px-4" id="trash-3">
+                            <i class="fas fa-trash-alt"></i>
+                          </button> 
+                    </div>
+                  </div>
+
+                  <div class="d-grid mb-3" id="add-producto3">
+                    <button type="button" class="btn btn-success mt-4" id="add-bolson">
+                        Agregar producto
+                        <i class="fas fa-plus-circle ms-1"></i>
+                    </button>
+                  </div>
+            
+                  <div class="mb-3" id="producto4">
+                      <label for="">Producto #4</label>
+                      <div class="d-flex">
+                          {{ show_field_no_label(form.producto4, class='form-control form-select input') }}
+                          <button type="button" class="btn btn-secondary ms-3 px-4" id="trash-4">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>  
+                      </div>
+                  </div>
+
+                  <div class="d-grid mb-3" id="add-producto4">
+                    <button type="button" class="btn btn-success mt-4" id="add-bolson">
+                        Agregar producto
+                        <i class="fas fa-plus-circle ms-1"></i>
+                    </button>
+                  </div>
+            
+                  <div class="mb-3" id="producto5">
+                      <label for="">Agregar producto #5</label>
+                      <div class="d-flex">
+                        {{ show_field_no_label(form.producto5, class='form-control form-select input') }}
+                        <button type="button" class="btn btn-secondary ms-3 px-4" id="trash-5">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>  
+                      </div>
+                  </div>
+
+                  <div class="d-grid mb-3" id="add-producto5">
+                    <button type="button" class="btn btn-success mt-4" id="add-bolson">
+                        Agregar producto
+                        <i class="fas fa-plus-circle ms-1"></i>
+                    </button>
+                  </div>
+
+            </div>
+
+            <div class="col-md-12">
+
+              <div class="mb-3">
+                  <label for="">Imagen</label>
+                  {{ show_field_no_label(form.imagen, class='form-control', placeholder='Imagen del bolson') }}
+              </div>
+
+
+              <div class="d-grid pt-2">
+                {{ show_submit(form.submit, class='btn btn-primary') }}
+              </div>
+
+
+
+
+
+            </div>
+    
+        </div>
+    
+        </form>
+    
+    </div>
+
+</div>
+
+{% endblock %}

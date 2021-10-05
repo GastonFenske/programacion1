@@ -29,3 +29,24 @@
         {{ field(**kwargs)|safe }}
 
 {% endmacro %}
+    
+{% macro show_field_no_label(field) %} 
+
+    {{ field(**kwargs)|safe }}
+    {{ show_error(field) }}
+
+{% endmacro %}
+
+{% macro show_switch(field) %}
+
+        {{ field.label }}
+        <!-- <label class="form-check-label" for="flexSwitchCheckChecked">Listo para la venta</label> -->
+
+        <label class="switch">
+            {{ field(**kwargs)|safe }}
+            <span class="slider round"></span>
+        </label>
+
+        {{ show_error(field) }}
+
+{% endmacro %}

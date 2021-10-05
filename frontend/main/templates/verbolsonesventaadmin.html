@@ -76,8 +76,33 @@
               </thead>
               <tbody>
               
+                {% for bolson in bolsones %}
 
                   <tr>
+                    <td scope="row">{{ bolson['id'] }}</th>
+                    <td>{{ bolson['nombre'] }}</td>
+                    <td>
+                        <div class="btn btn-success">
+                            En venta
+                            <i class="fas fa-check-circle ms-2"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <a href="#" class="btn btn-primary">
+                                Editar
+                            </a>
+                            <a href="#" class="btn btn-danger">
+                                Eliminar
+                            </a>
+
+                        </div>
+                    </td>
+                  </tr>
+
+                {% endfor %}
+
+                  <!-- <tr>
                     <td scope="row">1</th>
                     <td>Bolson de carnes</td>
                     <td>
@@ -97,7 +122,7 @@
 
                         </div>
                     </td>
-                  </tr>
+                  </tr> -->
 
 
 

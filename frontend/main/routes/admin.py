@@ -2,7 +2,7 @@ from flask import redirect, render_template, url_for, Blueprint, current_app, re
 import requests, json 
 from flask_login import current_user, login_required, LoginManager
 from .auth import admin_required
-from main.forms import PerfilForm
+from main.forms import PerfilForm, ProductoForm
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -61,7 +61,31 @@ def editar_perfil():
     form = PerfilForm()
     return render_template('editarperfiladmin.html', title='Admin', bg_color='bg-dark', form = form)
 
-@admin.route('/bolsones')
-def bolsones():
+@admin.route('/bolsones-venta')
+def bolsones_venta():
 
-    return render_template('verbolsonesadmin.html', bg_color = 'bg-dark')
+    page = {
+        "page": 1
+    }
+    r = requests.get(f'{current_app.config["API_URL"]}/bolsones-venta', headers={"content-type": "application/json"}, json=page)
+    bolsones = json.loads(r.text)["bolsonesventa"]
+    page = json.loads(r.text)["page"]
+    pages = json.loads(r.text)["pages"]
+
+
+    return render_template('verbolsonesventaadmin.html', bg_color = 'bg-dark', bolsones = bolsones, page = page, pages = pages)
+
+@admin.route('/agregar-bolson')
+def agregar_bolson():
+
+    data = {
+        'per_page': 10
+    }
+
+    r = requests.get(f'{current_app.config["API_URL"]}/productos', headers={"content-type": "application/json"}, json = data)
+    productos = json.loads(r.text)["productos"]
+
+    productos = [producto['nombre'] for producto in productos]
+
+    form = ProductoForm(productos = productos)
+    return render_template('agregarbolson.html', title='Admin', bg_color='bg-secondary', form = form)
