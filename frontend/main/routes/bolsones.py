@@ -1,5 +1,7 @@
 from flask import redirect, render_template, url_for, Blueprint, current_app
+from flask.globals import request
 import requests, json
+from main.routes.auth import BearerAuth
 
 bolsones = Blueprint('bolsones', __name__, url_prefix='/bolsones')
 
@@ -44,4 +46,14 @@ def ver(id):
     nombre = nombre, imagen = imagen, descripcion = descripcion, productos = productos
     )
 
+
+@bolsones.route('/eliminar/<int:id>')
+def eliminar(id):
+    r = requests.delete(
+        f'{current_app.config["API_URL"]}/bolson-pendiente/{int(id)}',
+        headers={"content-type": "application/json"},
+        auth= BearerAuth(str(request.cookies['access_token']))
+    )
+    if r.status_code == 204:
+        return redirect(url_for('admin.bolsones_venta'))
 

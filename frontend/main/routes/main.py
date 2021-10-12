@@ -52,6 +52,8 @@ def login():
             login_user(user)
             if current_user.role == 'admin':
                 req = make_response(redirect(url_for('admin.home')))
+            elif current_user.role == 'proveedor':
+                req = make_response(redirect(url_for('proveedor.home')))
             else:
                 req = make_response(redirect(url_for('bolsones.venta', page=1)))
             req.set_cookie('access_token', user_data.get('access_token'), httponly=False)
@@ -70,6 +72,7 @@ def login():
 @main.route('/logout')
 def logout():
     req = make_response(redirect(url_for('main.index')))
+    req.set_cookie('access_token', '', httponly = True)
     req.delete_cookie('access_token', httponly=False)
     logout_user()
     return req

@@ -50,7 +50,7 @@ class BolsonPendiente(Resource):
     @role_required(roles=['admin'])
     def delete(self, id):
         bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
-        if bolsonpendiente.aprobado == 0:
+        if bolsonpendiente.aprobado == 0 or bolsonpendiente.aprobado == 1:
             db.session.delete(bolsonpendiente)
             db.session.commit()
             return '', 204

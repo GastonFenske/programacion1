@@ -23,51 +23,52 @@ class ProductoForm(FlaskForm):
         ]
     )
 
-    venta = IntegerField(
+    venta = BooleanField(
         'Listo para la venta',
-        [
-            validators.Required(message = 'Este campo es requerido')
-        ]
+        # [
+        #     validators.Required(message = 'Este campo es requerido')
+        # ],
+        default = False
     )
 
     producto = SelectField(
         'Seleccionar producto #1',
         [
             validators.Required(message = 'Este campo es requiredo')
-        ],
-        choices = [('Seleccionar producto'), ('Manzanas'), ('Lentejas')]
+        ]
+        # choices = [],
+        # coerce=int
     )
+
+    # cantidad_producto = IntegerField(
+    #     'Cantidad',
+    #     [
+    #         validators.Required()
+    #     ]
+    # )
 
     producto2 = SelectField(
         'Seleccionar producto #2',
-        [
-            validators.Required(message = 'Este campo es requiredo')
-        ],
-        choices = [('Seleccionar producto'), ('Manzanas'), ('Lentejas')]
+        choices = []
+        # coerce=int
     )
 
     producto3 = SelectField(
         'Seleccionar producto #3',
-        [
-            validators.Required(message = 'Este campo es requiredo')
-        ],
-        choices = [('Seleccionar producto'), ('Manzanas'), ('Lentejas')]
+        choices = [],
+        # coerce=int
     )
 
     producto4 = SelectField(
         'Seleccionar producto #4',
-        [
-            validators.Required(message = 'Este campo es requiredo')
-        ],
-        choices = [('Seleccionar producto'), ('Manzanas'), ('Lentejas')]
+        choices = []
+        # coerce=int
     )
 
     producto5 = SelectField(
         'Seleccionar producto #5',
-        [
-            validators.Required(message = 'Este campo es requiredo')
-        ],
-        choices = [('Seleccionar producto'), ('Manzanas'), ('Lentejas')]
+        choices = []
+        # coerce=int
     )
 
     imagen = StringField(

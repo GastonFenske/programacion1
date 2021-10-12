@@ -1,5 +1,5 @@
 {% extends 'main.html' %}
-{% from 'macros/form_macros.html' import show_field_no_label, show_submit, show_switch %}
+{% from 'macros/form_macros.html' import show_field_no_label, show_submit, show_switch, show_field %}
 
 
 {% block head %}
@@ -44,7 +44,7 @@
     
         </div>
     
-        <form class="row d-flex justify-content-center">
+        <form class="row d-flex justify-content-center" action="{{ url_for('admin.agregar_bolson') }}" method="POST">
     
             <!-- <div class="bg-secondary"> -->
     
@@ -77,8 +77,20 @@
 
     
                 <div class="mb-3">
-                    <label for="">Producto #1</label>
-                        {{ show_field_no_label(form.producto, class='form-control form-select input') }}
+                  <div class="d-flex">
+                    <div class="w-100">
+                      <label for="">Producto #1</label>
+                      {{ show_field_no_label(form.producto, class='form-control form-select input') }}
+                    </div>
+                    <!-- <div class="flex-shrink-1">
+                      <label for="">Cantidad</label>
+                      {# show_field_no_label(form.cantidad_producto, class='form-control', placeholder='0') #}
+                    </div> -->
+
+
+                  </div>
+
+
                 </div>
 
 

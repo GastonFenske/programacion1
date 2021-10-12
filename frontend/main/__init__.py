@@ -7,9 +7,8 @@ from flask_login import LoginManager, login_required
 
 csrf = CSRFProtect()
 login_manager = LoginManager()
-
 def create_app():
-
+            
     app = Flask(__name__)
 
     load_dotenv()

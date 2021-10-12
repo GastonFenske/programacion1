@@ -2,6 +2,7 @@ from .. import login_manager
 from flask import request, flash, redirect, url_for
 from flask_login import UserMixin, LoginManager, current_user
 import jwt
+import requests
 
 class User(UserMixin):
     def __init__(self, id, email, role):
@@ -42,3 +43,10 @@ def admin_required(fn):
         else:
             return fn(*args, **kwargs)
     return wrapper
+
+class BearerAuth(requests.auth.AuthBase):
+    def __init__(self, token):
+        self.token = token
+    def __call__(self, r):
+        r.headers["authorization"] = "Bearer " + self.token
+        return r 
