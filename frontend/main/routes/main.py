@@ -55,7 +55,7 @@ def login():
             elif current_user.role == 'proveedor':
                 req = make_response(redirect(url_for('proveedor.home')))
             else:
-                req = make_response(redirect(url_for('bolsones.venta', page=1)))
+                req = make_response(redirect(url_for('cliente.bolsones_venta', page = 1)))
             req.set_cookie('access_token', user_data.get('access_token'), httponly=False)
 
             if current_user.is_authenticated:

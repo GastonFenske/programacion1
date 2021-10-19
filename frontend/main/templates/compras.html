@@ -8,6 +8,7 @@
 
 {% block content %}
 
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
     <div class="container pt-2 pb-2">
       <a class="navbar-brand" href="{{ url_for('main.index') }}">Bolsones Store</a>
@@ -39,7 +40,7 @@
 
                   </li>
                 <li>
-                    <a class="dropdown-item d-grid" href="{{ url_for('cliente.compras') }}">
+                    <a class="dropdown-item d-grid" href="{{ url_for('cliente.compra', id = 1) }}">
                       <div class="">Ver mis compras</div>
                     </a>
                   </li>
@@ -62,30 +63,40 @@
 
   <div class="container">
 
-    <h1>Bolsones en venta</h1>
+    <h1>Mis compras</h1>
   
-    {% for bolson in bolsones %}
+    {% for compra in compras %}
     <div class="bg-forms p-4 rounded mt-3 row">
   
           <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-3 p-0">
-            <img src="{{ bolson['imagen'] }}" alt="" class="img-bolson">
+            <img src="{{compra['bolson']['imagen']}}" alt="" class="img-bolson">
           </div>
   
           <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-9 p-0">
-            <h2>{{ bolson['nombre'] }}</h2>
+            <h2>{{ compra['bolson']['nombre'] }}</h2>
   
             <div class="mt-4">
-                <p>{{ bolson['descripcion'] }}</p>
-                <p>Fecha: {{ bolson['fecha'] }}</p>
+                <p>{{ compra['bolson']['descripcion'] }}</p>
+                <p>Fecha compra: {{ compra['bolson']['fecha'] }}</p>
   
                 <div class="d-flex mt-4">
-                  <a href="{{url_for('bolsones.ver', id = bolson['id'] )}}">
-                      <div class="btn-own bg-danger me-2">Ver mas</div>
+                  <a href="{{url_for('cliente.compra', id = compra['bolson']['id'])}}" class="btn-own bg-primary me-2">
+                      <!-- <div class="btn-own bg-primary me-2">Detalles</div> -->
+                      Detalles
                   </a>
-  
-                  <a href="">
-                      <div class="btn-own bg-success">Reservar</div>
-                  </a>
+                  
+                  {% if compra['retirado'] == true %}
+                    <div class="btn-own bg-success">
+                        <!-- <div class="btn-own bg-success">Pendiente</div> -->
+                        Retirado
+                        <i class="fas fa-check-circle ms-2"></i>
+                    </div>
+                  {% else %}
+                    <div class="btn-own bg-warning">
+                        Pendiente
+                        <i class="fas fa-exclamation-circle ms-2"></i>
+                    </div>
+                  {% endif %}
                 </div>
             
             </div>
@@ -135,12 +146,7 @@
     </div>
   
   </div>
-  
-  
-  
-  
-  
-  
-  </div>   
+
+
 
 {% endblock %}

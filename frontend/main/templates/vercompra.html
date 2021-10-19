@@ -10,14 +10,14 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
       <div class="container pt-2 pb-2">
-        <a class="navbar-brand" href="{{ url_for('cliente.home') }}">Bolsones Store</a>
+        <a class="navbar-brand" href="{{ url_for('cliente.bolsones_venta', page = 1) }}">Bolsones Store</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
             <li class="nav-item">
-              <a class="nav-link active me-3" href="">usuario@gmail.com</a>
+              <a class="nav-link active me-3" href="">{{current_user.email}}</a>
             </li>
             <!-- <li class="nav-item d-flex align-items-center">
                 <a href="#">
@@ -38,11 +38,11 @@
 
 
                     </li>
-                  <!-- <li>
-                      <a class="dropdown-item d-grid" href="">
+                  <li>
+                      <a class="dropdown-item d-grid" href="{{url_for('cliente.compras')}}">
                         <div class="">Ver mis compras</div>
                       </a>
-                    </li> -->
+                    </li>
                   <li><hr class="dropdown-divider"></li>
                   <li>
                       <a class="dropdown-item d-grid" href="#">
@@ -70,17 +70,27 @@
     
                     <div class="d-flex flex-column">
         
-                        <img src="https://i.ibb.co/sVSPwkg/bolson-frutas-jpg.jpg" alt="" class="img-bolson">
+                        <img src="{{compra['bolson']['imagen']}}" alt="" class="img-bolson">
     
                         <div class="botones">
-    
-                                <div class="btn btn-success mt-3 p-2 d-grid">
+
+                                {% if compra['retirado'] == true %}
+                                <div class="btn-own btn-success mt-3 p-2 d-grid">
                                     <div class="fs-4">
                                         Retirado
                                         <i class="fas fa-check-circle ms-2"></i>
                                     </div>
       
                                 </div>
+                                {% else %}
+                                <div class="btn-own btn-warning mt-3 p-2 d-grid">
+                                  <div class="fs-4">
+                                      Pendiente
+                                      <i class="fas fa-exclamation-circle ms-2"></i>
+                                  </div>
+    
+                              </div>
+                                {% endif %}
     
                             <!-- <div class="btn btn-danger d-grid mt-3 p-3">Ver usuario</div> -->
                         </div>
@@ -92,18 +102,17 @@
     
                 <div class="col-md-4 p-3">
     
-                    <h3>Bolson de frutas</h3>
-                    <p>Fecha compra: 27/02/2020</p>
+                    <h3>{{compra['bolson']['nombre']}}</h3>
+                    <p>Fecha compra: {{compra['bolson']['fehca']}}</p>
     
                     <br/>
     
                     <p>El bolson contiene:</p>
     
                     <ul>
-                        <li><p>12 naranjas</p></li>
-                        <li><p>12 manzanas</p></li>
-                        <li><p>12 peras</p></li>
-                        <li><p>4 limones</p></li>
+                        {% for producto in productos %}
+                        <li><p>{{producto['producto']['nombre']}}</p></li>
+                        {% endfor %}
                     </ul>
     
                 </div>

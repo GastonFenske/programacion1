@@ -1,17 +1,56 @@
 from flask import blueprints, redirect, render_template, url_for, Blueprint, current_app, request
 from main.forms import PerfilForm
+from .bolsones import traer_bolsones
+import requests, json
+from flask_login import current_user
+from main.routes.auth import BearerAuth
 
 cliente = Blueprint('cliente', __name__, url_prefix='/cliente')
 
-@cliente.route('/home')
-def home():
+@cliente.route('/bolsones-venta/<int:page>')
+def bolsones_venta(page):
 
-    return render_template('clientehome.html', bg_color = 'bg-secondary', title='Bolsones Store')
+    bolsones, page, pages = traer_bolsones(page)
+
+    return render_template('clientehome.html', bg_color = 'bg-secondary', title='Bolsones Store', page = page, pages = pages, bolsones = bolsones)
+
+@cliente.route('/compras')
+def compras():
+
+    data = {
+        "usuarioId": current_user.id
+    }   
+
+    r = requests.get(f'{current_app.config["API_URL"]}/compras', headers={"content-type": "applications/json"}, json=data, auth= BearerAuth(str(request.cookies['access_token'])))
+
+    #print(json.loads(r.text)["compras"])
+    compras = json.loads(r.text)["compras"]
+    page = json.loads(r.text)["page"]
+    pages = json.loads(r.text)["pages"]
+
+    return render_template('compras.html', bg_color = 'bg-secondary', tittle= 'Mis compras', compras = compras, page = page, pages = pages)
+    #return '<h1>tamo chelo<h1>'
+
 
 @cliente.route('/ver-compra/<id>')
 def compra(id):
 
-    return render_template('vercompra.html', bg_color = 'bg-secondary', title='Bolsones Store')
+
+
+    r = requests.get(f'{current_app.config["API_URL"]}/compra/{id}', headers={"content-type": "applications/json"}, json={}, auth= BearerAuth(str(request.cookies['access_token'])))
+
+    compra = json.loads(r.text)
+    print(compra)
+
+    json_api = {
+	    "bolsonId": int(id)
+    }
+
+    r = requests.get(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json = json_api)
+
+    productos = json.loads(r.text)["productosbolsones"]
+
+    return render_template('vercompra.html', bg_color = 'bg-secondary', title='Bolsones Store', compra = compra, productos = productos)
 
 
 @cliente.route('/perfil')

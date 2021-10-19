@@ -5,19 +5,38 @@ from main.routes.auth import BearerAuth
 
 bolsones = Blueprint('bolsones', __name__, url_prefix='/bolsones')
 
+def traer_bolsones(page: int):
+    page = {
+        "page": int(page)
+    }
+    r = requests.get(
+        f'{current_app.config["API_URL"]}/bolsones-venta',
+        headers={
+            "content-type": "application/json"
+        },
+        json = page
+    )
+    bolsones = json.loads(r.text)["bolsonesventa"]
+    page = json.loads(r.text)["page"]
+    pages = json.loads(r.text)["pages"]
+
+    return bolsones, page, pages
+
 
 @bolsones.route('/venta/<int:page>')
 def venta(page):
 
-    page = {
-        "page": int(page)
-    }
+    bolsones, page, pages = traer_bolsones(page)
 
-    r = requests.get(f'{current_app.config["API_URL"]}/bolsones-venta', headers={"content-type": "application/json"}, json=page)
+    # page = {
+    #     "page": int(page)
+    # }
 
-    bolsones = json.loads(r.text)["bolsonesventa"]
-    page = json.loads(r.text)["page"]
-    pages = json.loads(r.text)["pages"]
+    # r = requests.get(f'{current_app.config["API_URL"]}/bolsones-venta', headers={"content-type": "application/json"}, json=page)
+
+    # bolsones = json.loads(r.text)["bolsonesventa"]
+    # page = json.loads(r.text)["page"]
+    # pages = json.loads(r.text)["pages"]
 
     return render_template('bolsoneshome.html', bg_color='bg-secondary', title='Bolsones', bolsones = bolsones, page = page, pages = pages)
 

@@ -3,7 +3,7 @@ from flask import redirect, render_template, url_for, Blueprint, current_app, re
 import requests, json 
 from flask_login import current_user, login_required, LoginManager
 from .auth import admin_required
-from main.forms import PerfilForm, ProductoForm
+from main.forms import PerfilForm, BolsonForm
 from main.routes.auth import BearerAuth
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
@@ -100,7 +100,7 @@ def agregar_bolson():
     productos = [(producto['id'], producto['nombre'])  for producto in productos]
     productos.insert(0, (None, '--Seleccionar producto'))
 
-    form = ProductoForm()
+    form = BolsonForm()
     form.producto.choices = productos
     form.producto2.choices = productos
     form.producto3.choices = productos

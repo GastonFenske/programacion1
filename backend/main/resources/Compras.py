@@ -44,7 +44,7 @@ class Compra(Resource):
             return '', 404
 
 class Compras(Resource):
-    @role_required(roles=['admin'])
+    @role_required(roles=['admin', 'cliente'])
     def get(self):
         page = 1
         per_page = 10
