@@ -53,9 +53,29 @@ def compra(id):
     return render_template('vercompra.html', bg_color = 'bg-secondary', title='Bolsones Store', compra = compra, productos = productos)
 
 
-@cliente.route('/perfil')
-def perfil():
 
+def cargar_un_perfil(id: int):
     form = PerfilForm()
+    if not form.is_submitted():
+        r = requests.get(
+            f'{current_app.config["API_URL"]}/usuario/{int(id)}',
+            headers={"content-type": "application/json"},
+            auth=BearerAuth(str(request.cookies['access_token']))
+        )
+    try:
+        usuario = json.loads(r.text)
+        form.nombre.data = usuario['nombre']
+        form.apellido.data = usuario['apellido']
+        form.telefono.data = usuario['telefono']
+        form.email.data = usuario['mail']
+    except:
+        pass
 
+    return form
+
+
+@cliente.route('/perfil/<int:id>', methods=['POST', 'GET'])
+def perfil(id):
+    form = cargar_un_perfil(id)
     return render_template('editarperfil.html', bg_color = 'bg-secondary', form = form, title='Bolsones Store')
+

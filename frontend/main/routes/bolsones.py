@@ -1,7 +1,9 @@
 from flask import redirect, render_template, url_for, Blueprint, current_app
 from flask.globals import request
+from flask.templating import render_template_string
 import requests, json
 from main.routes.auth import BearerAuth
+from flask_login import current_user
 
 bolsones = Blueprint('bolsones', __name__, url_prefix='/bolsones')
 
@@ -75,4 +77,19 @@ def eliminar(id):
     )
     if r.status_code == 204:
         return redirect(url_for('admin.bolsones_venta'))
+
+@bolsones.route('/reservar/<int:id>', methods=['POST', 'GET'])
+def reservar(id: int):
+    data = {
+        "usuarioId": current_user.id,
+        "bolsonId": id
+    }
+    r = requests.post(
+        f'{current_app.config["API_URL"]}/compras',
+        headers = {"content-type": "application/json"},
+        json = data,
+        auth= BearerAuth(str(request.cookies['access_token']))
+    )
+    if r.status_code == 201:
+        return redirect(url_for('cliente.compras'))
 

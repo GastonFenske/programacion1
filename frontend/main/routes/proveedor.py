@@ -5,6 +5,7 @@ from werkzeug.utils import redirect
 from main.forms import PerfilForm, ProductoForm
 import requests, json
 from main.routes.auth import BearerAuth
+from .clientes import cargar_un_perfil
 
 proveedor = Blueprint('proveedor', __name__, url_prefix='/proveedor')
 
@@ -12,9 +13,9 @@ proveedor = Blueprint('proveedor', __name__, url_prefix='/proveedor')
 def home():
     return render_template('homeproveedor.html', title="Proveedor", bg_color="bg-primary")
 
-@proveedor.route('/perfil')
-def editar_perfil():
-    form = PerfilForm()
+@proveedor.route('/perfil/<int:id>')
+def editar_perfil(id):
+    form = cargar_un_perfil(id)
     return render_template('editarperfilproveedor.html', title='Proveedor', form = form, bg_color = 'bg-primary')
 
 @proveedor.route('/agregar-producto', methods=['POST', 'GET'])

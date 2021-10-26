@@ -151,7 +151,7 @@
         <div class="col-md-6 mt-3">
           <div class="d-grid">
             <!-- <button class="btn btn-secondary" type="button">Agregar proveedor</button> -->
-              <a href="{{ url_for('admin.editar_perfil') }}">
+              <a href="{{ url_for('admin.editar_perfil', id = current_user['id']) }}">
                   <div class="btn-own p-3 bg-secondary d-flex justify-content-between">
                       <div class="d-flex justify-content-start align-items-center">
                           <div>
@@ -172,7 +172,7 @@
         <div class="col-md-6 mt-3">
           <div class="d-grid">
             <!-- <button class="btn btn-secondary" type="button">Agregar proveedor</button> -->
-              <a href="#">
+              <a href="{{url_for('admin.productos')}}">
                   <div class="btn-own p-3 bg-secondary d-flex justify-content-between">
                       <div class="d-flex justify-content-start align-items-center">
                           <div>
@@ -193,7 +193,7 @@
         <div class="col-md-6 mt-3">
           <div class="d-grid">
             <!-- <button class="btn btn-secondary" type="button">Agregar proveedor</button> -->
-              <a href="#">
+              <a href="{{url_for('admin.compras')}}">
                   <div class="btn-own p-3 bg-secondary d-flex justify-content-between">
                       <div class="d-flex justify-content-start align-items-center">
                           <div>

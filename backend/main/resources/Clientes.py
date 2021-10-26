@@ -8,14 +8,18 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class Cliente(Resource):
-    @role_required(roles=['admin'])
+    @role_required(roles=['admin', 'cliente'])
     def get(self, id):
+        current_user = get_jwt_identity()
         cliente = db.session.query(UsuarioModel).get_or_404(id)
         if cliente.role == 'cliente':
-            try:
-                return cliente.to_json()
-            except:
-                return '', 404
+            if current_user['usuarioId'] == cliente.id or current_user['role'] == 'admin':
+                try:
+                    return cliente.to_json()
+                except:
+                    return '', 404
+            else:
+                return 'Unauthorized', 401    
         else:
             return 'cliente not found', 404
 

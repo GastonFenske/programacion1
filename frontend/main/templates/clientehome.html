@@ -32,7 +32,7 @@
               <ul class="dropdown-menu my-3" aria-labelledby="navbarDropdown">
                 <li>
 
-                    <a class="dropdown-item d-grid" href="{{ url_for('cliente.perfil') }}">
+                    <a class="dropdown-item d-grid" href="{{ url_for('cliente.perfil', id = current_user['id']) }}">
                         <div class="">Editar perfil</div>
                     </a>
 
@@ -83,7 +83,7 @@
                       <div class="btn-own bg-danger me-2">Ver mas</div>
                   </a>
   
-                  <a href="">
+                  <a href="{{url_for('bolsones.reservar', id = bolson['id'])}}">
                       <div class="btn-own bg-success">Reservar</div>
                   </a>
                 </div>

@@ -5,6 +5,7 @@ from flask_login import current_user, login_required, LoginManager
 from .auth import admin_required
 from main.forms import PerfilForm, BolsonForm
 from main.routes.auth import BearerAuth
+from .clientes import cargar_un_perfil
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -13,6 +14,7 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 @login_required
 def home():
     return render_template('homeadmin.html', title='Admin', bg_color="bg-dark")
+
 
 @admin.route('/agregar-proveedor')
 @login_required
@@ -30,6 +32,7 @@ def agregar_proveedor():
 
     return render_template('agregar_proveedor.html', title='Admin', bg_color="bg-dark", usuarios = usuarios, page = page, pages = pages)
     #return render_template('pruebas.html', title='Admin', bg_color='bg-dark')
+
 
 @admin.route('/add-proveedor/<int:id>')
 @login_required
@@ -61,14 +64,11 @@ def remove_proveedor(id):
 #         return r 
 
 
-@admin.route('/perfil')
+@admin.route('/perfil/<int:id>', methods=['POST', 'GET'])
 @login_required
-def editar_perfil():
-    form = PerfilForm()
-
-    
-
-    return render_template('editarperfiladmin.html', title='Admin', bg_color='bg-dark', form = form)
+def editar_perfil(id):
+    form = cargar_un_perfil(id)
+    return render_template('editarperfiladmin.html', title='Admin', bg_color='bg-secondary', form = form)    
 
 @admin.route('/bolsones-venta')
 def bolsones_venta():
@@ -98,7 +98,7 @@ def agregar_bolson():
 
 
     productos = [(producto['id'], producto['nombre'])  for producto in productos]
-    productos.insert(0, (None, '--Seleccionar producto'))
+    productos.insert(0, (0, '--Seleccionar producto'))
 
     form = BolsonForm()
     form.producto.choices = productos
@@ -122,7 +122,7 @@ def agregar_bolson():
 
         productos = [form.producto.data, form.producto2.data, form.producto3.data, form.producto4.data, form.producto5.data]
         for producto in productos:
-            if producto != 'None':
+            if producto != 0:
                 print('it works')
                 data = {
                     'productoId': producto,
@@ -137,3 +137,55 @@ def agregar_bolson():
                 print('it doesnt work')
 
     return render_template('agregarbolson.html', title='Admin', bg_color='bg-secondary', form = form)
+
+@admin.route('/ver-productos')
+def productos():
+
+    data = {
+        'per_page': 15
+    }
+
+    r = requests.get(f'{current_app.config["API_URL"]}/productos', headers={"content-type": "application/json"}, json = data, auth=BearerAuth(str(request.cookies['access_token'])))
+
+
+
+    productos = json.loads(r.text)['productos']
+    page = json.loads(r.text)['page']
+    pages = json.loads(r.text)['pages']
+
+    return render_template('ver_productos_admin.html', bg_color = 'bg-dark', title = 'Admin', productos = productos, page = page, pages= pages)
+
+@admin.route('/producto-eliminar/<int:id>')
+def eliminar_producto(id):
+
+    r = requests.delete(f'{current_app.config["API_URL"]}/producto/{id}', headers={"content-type": "application/json"}, auth=BearerAuth(str(request.cookies['access_token'])))
+
+    return redirect(url_for('admin.productos'))
+
+@admin.route('/compras')
+def compras():
+
+    data = {
+
+    }
+
+    r = requests.get(f'{current_app.config["API_URL"]}/compras', headers={"content-type": "application/json"}, json = data, auth=BearerAuth(str(request.cookies['access_token'])))
+
+    compras = json.loads(r.text)['compras']
+    page = json.loads(r.text)['page']
+    pages = json.loads(r.text)['pages']
+
+    return render_template('compras_admin.html', bg_color = 'bg-dark', title = 'Panel Admin', compras = compras)
+
+@admin.route('/compra/<int:id>')
+def ver_compra(id):
+
+    r = requests.get(f'{current_app.config["API_URL"]}/compra/{id}', headers={"content-type": "application/json"}, auth=BearerAuth(str(request.cookies['access_token'])))
+
+    compra = json.loads(r.text)
+
+    return render_template('ver_compra_admin.html', bg_color = 'bg-dark', title = 'Ver compra', compra = compra)
+
+@admin.route('/ver-perfil/<int:id>')
+def ver_perfil(id):
+    pass

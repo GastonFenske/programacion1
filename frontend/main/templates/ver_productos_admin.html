@@ -1,0 +1,128 @@
+{% extends 'main.html' %}
+{% from 'macros/form_macros.html' import show_field, show_submit %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+    <div class="container pt-2 pb-2">
+      <a class="navbar-brand" href="{{ url_for('admin.home') }}">Bolsones Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+            <li class="nav-item">
+                <a href="{{ url_for('admin.home') }}" class="nav-link active me-3">Panel admin</a>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link active me-3 link-designated" href="{{url_for('bolsones.venta', page = 1)}}">Ver bolsones</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary py-2 px-4" href="{{ url_for('main.logout') }}" tabindex="-1" aria-disabled="true">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+
+          
+    <div class="row">
+
+        <div class="d-flex justify-content-center">
+
+            <div class="col-md-4">
+                <form class="">
+    
+
+                            <div class="d-flex flex-column">
+                                <label for="exampleInputEmail1" class="form-label">Filtrar by Id</label>
+                                <div class="d-flex">
+                                    <input type="number" class="form-control me-3 rounded" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa un id">
+                                    <button type="submit" class="btn btn-primary px-3 rounded-3">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+
+    
+                </form>
+    
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="row mt-4">
+
+        <table class="tabla text-white bg-secondary">
+            <thead class="">
+              <tr class="">
+                <th scope="col">Id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Proveedor Id</th>
+                <th scope="col">Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+            
+            {% for producto in productos %}
+                <tr>
+                  <td scope="row">{{ producto['id'] }}</th>
+                  <td>{{ producto['nombre'] }}</td>
+                  <td>
+                      <a href="#" class="text-white">
+                        
+                        {{ producto['usuario']['id'] }}
+                      </a>
+                  </td>
+                  <td>
+                        <a href="{{ url_for('admin.eliminar_producto', id = producto['id']) }}" class="btn btn-danger">
+                            Eliminar
+                        </a>
+                  </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<div class="container my-5 p-0">
+    <nav aria-label="" class="">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link bg-forms pag-back" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+          </li>
+          <li class="page-item"><a class="page-link bg-contrast" href="#">1</a></li>
+          <li class="page-item" aria-current="page">
+            <a class="page-link bg-forms" href="#">2</a>
+          </li>
+          <li class="page-item">
+              <a class="page-link bg-forms" href="#">3</a>
+            </li>
+          <li class="page-item">
+            <a class="page-link bg-forms pag-next" href="#">Siguiente</a>
+          </li>
+        </ul>
+      </nav>
+</div>
+
+
+
+
+
+
+</div>
+
+{% endblock %}

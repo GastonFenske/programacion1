@@ -32,7 +32,7 @@
                 <ul class="dropdown-menu my-3" aria-labelledby="navbarDropdown">
                   <li>
 
-                      <a class="dropdown-item d-grid" href="{{ url_for('cliente.perfil') }}">
+                      <a class="dropdown-item d-grid" href="{{ url_for('cliente.perfil', id = current_user['id']) }}">
                           <div class="">Editar perfil</div>
                       </a>
 
@@ -103,7 +103,7 @@
                 <div class="col-md-4 p-3">
     
                     <h3>{{compra['bolson']['nombre']}}</h3>
-                    <p>Fecha compra: {{compra['bolson']['fehca']}}</p>
+                    <p>Fecha compra: {{compra['fecha_hora_compra']}}</p>
     
                     <br/>
     
@@ -120,6 +120,10 @@
            
     
         </div>
+
+        <!-- <a href="{# url_for('cliente.compras') #}" class="btn btn-primary d-grid p-2 fs-5">
+          Volver a compras
+        </a> -->
 
     </div>
 

@@ -1,3 +1,4 @@
+from logging import error
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
@@ -73,7 +74,7 @@ class Compras(Resource):
     @jwt_required()
     def post(self):
         compra = CompraModel.from_json(request.get_json())
-        current_user = get_jwt_identity()
+        current_user = get_jwt_identity()['usuarioId']
         compra.usuarioId = current_user
         try:
             db.session.add(compra)
