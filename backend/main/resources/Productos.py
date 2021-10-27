@@ -20,6 +20,7 @@ class Producto(Resource):
     def delete(self, id):
         current_user = get_jwt_identity()
         producto = db.session.query(ProductoModel).get_or_404(id)
+
         if current_user['usuarioId'] == producto.usuarioId or current_user['role'] == 'admin':
             try:
                 db.session.delete(producto)

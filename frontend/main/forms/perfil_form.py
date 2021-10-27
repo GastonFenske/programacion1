@@ -34,7 +34,7 @@ class PerfilForm(FlaskForm):
     new_password = PasswordField(
         'Contraseña nueva',
         [
-            validators.Required(message = 'La contraseña es requrida'),
+            #validators.Required(message = 'La contraseña es requrida'),
             validators.EqualTo('confirm', message = 'Las contraseñas no coinciden')
         ]
     )
@@ -46,7 +46,7 @@ class PerfilForm(FlaskForm):
     current_password = PasswordField(
         'Contraseña actual',
         [
-            validators.Required(message = 'La contraseña es requredida')
+            #validators.Required(message = 'La contraseña es requredida')
         ]
     )
 

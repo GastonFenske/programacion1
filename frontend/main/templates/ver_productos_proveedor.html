@@ -1,5 +1,4 @@
 {% extends 'main.html' %}
-{% from 'macros/form_macros.html' import show_field, show_submit %}
 
 {% block head %}
     {{ super() }}
@@ -10,26 +9,22 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
     <div class="container pt-2 pb-2">
-      <a class="navbar-brand" href="{{ url_for('admin.home') }}">Bolsones Store</a>
+      <a class="navbar-brand" href="{{ url_for('proveedor.home') }}">Bolsones Store</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
-            <li class="nav-item">
-                <a href="{{ url_for('admin.home') }}" class="nav-link active me-3">Panel admin</a>
-            </li>
           <li class="nav-item">
             <a class="nav-link active me-3 link-designated" href="{{url_for('bolsones.venta', page = 1)}}">Ver bolsones</a>
           </li>
           <li class="nav-item">
-            <a class="btn btn-primary py-2 px-4" href="{{ url_for('main.logout') }}" tabindex="-1" aria-disabled="true">Logout</a>
+            <a class="btn btn-contrast py-2 px-4" href="{{ url_for('main.logout') }}" tabindex="-1" aria-disabled="true">Logout</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-
 
   <div class="container">
 
@@ -47,7 +42,7 @@
                                 <label for="exampleInputEmail1" class="form-label">Filtrar by Id</label>
                                 <div class="d-flex">
                                     <input type="number" class="form-control me-3 rounded" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa un id">
-                                    <button type="submit" class="btn btn-primary px-3 rounded-3">
+                                    <button type="submit" class="btn btn-contrast px-3 rounded-3">
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>
@@ -70,48 +65,31 @@
             <thead class="">
               <tr class="">
                 <th scope="col">Id</th>
-                <th scope="col">Usuario</th>
-                <th scope="col">Estado</th>
+                <th scope="col">Nombre</th>
                 <th scope="col">Accion</th>
+                <!-- <th scope="col">Accion</th> -->
               </tr>
             </thead>
             <tbody>
             
-            {% for compra in compras %}
+            {% for producto in productos %}
                 <tr>
-                  <td scope="row">{{ compra['id'] }}</th>
+                  <td scope="row">{{ producto['id'] }}</th>
                   <td>
                       <a href="#" class="text-white">
 
-                          {{ compra['usuario']['nombre'] + ' ' + compra['usuario']['apellido'] }}
+                          {{ producto['nombre'] }}
                       </a>  
                   </td>
+
                   <td>
-                    {% if compra['retirado'] == true %}
-
-                    <div class="btn btn-success">
-                        Retirado
-                        <i class="fas fa-check-circle ms-2"></i>
-                    </div>
-
-                  {% else %}
-
-                  <div class="btn bg-warning text-white">
-                    Pendiente
-                    <i class="fas fa-exclamation-circle ms-2"></i>
-                  </div>
-
-                  {% endif %}
-                  </td>
-                  <td>
-                        <a href="{{ url_for('admin.ver_compra', id = compra['id']) }}" class="btn btn-primary">
-                            Ver detalle
+                        <a href="{{url_for('proveedor.editar_producto', id = producto['id'])}}" class="btn btn-warning text-white">
+                            Editar
                         </a>
-                        {% if compra['retirado'] == false %}
-                        <a href="{{ url_for('admin.bolson_retirado', id = compra['id']) }}" class="btn btn-danger text-white ms-2">
-                            Marcar retirado
+                        <a href="{{url_for('proveedor.eliminar_producto', id = producto['id'])}}" class="btn btn-danger ms-2">
+                            Eliminar
                         </a>
-                        {% endif %}
+
                   </td>
                 </tr>
             {% endfor %}

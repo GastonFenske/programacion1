@@ -1,0 +1,65 @@
+{% extends 'main.html' %}
+{% from 'macros/form_macros.html' import show_field, show_submit %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+    <div class="container pt-2 pb-2">
+      <a class="navbar-brand" href="{{ url_for('proveedor.home') }}">Bolsones Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active me-3 link-designated" href="{{url_for('bolsones.venta', page = 1)}}">Ver bolsones</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-contrast py-2 px-4" href="{{ url_for('main.logout') }}" tabindex="-1" aria-disabled="true">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div class="row d-flex justify-content-center my-5">
+        <div class="bg-forms p-5 rounded col-md-4 col-10">
+            <div class="d-flex justify-content-center">
+                <h3>Editar producto</h3>
+            </div>
+            <form class="pt-3" action="{{ url_for('proveedor.agregar_producto') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <div class="mb-3">
+
+                  <!-- <label for="exampleInputEmail1" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu email"> -->
+
+                  {{ show_field(form.nombre, class='form-control', placeholder='Ingresa el nombre del producto') }}
+
+                </div>
+
+                <div class="d-grid pt-3">
+
+                    <!-- <button type="submit" class="btn btn-primary">Iniciar sesion</button> -->
+
+                    {{ show_submit(form.submit, class='btn btn-primary', value='Actualizar Producto') }}
+
+                </div>
+
+              </form>
+        </div>
+    </div>
+
+
+  </div>
+
+
+{% endblock %}

@@ -1,6 +1,8 @@
 from logging import log, logMultiprocessing
 from flask import redirect, render_template, url_for, Blueprint, current_app, request
-import requests, json 
+import requests, json
+
+from werkzeug.datastructures import Headers 
 from flask_login import current_user, login_required, LoginManager
 from .auth import admin_required
 from main.forms import PerfilForm, BolsonForm
@@ -68,7 +70,24 @@ def remove_proveedor(id):
 @login_required
 def editar_perfil(id):
     form = cargar_un_perfil(id)
-    return render_template('editarperfiladmin.html', title='Admin', bg_color='bg-secondary', form = form)    
+    print(form.nombre.data)
+    return render_template('editarperfiladmin.html', title='Admin', bg_color='bg-secondary', form = form, id = id)
+
+
+@admin.route('/actualizar-perfil/<int:id>', methods=['POST'])
+def actualizar_perfil(id):
+    form = cargar_un_perfil(id)    
+    usuario = {
+        "nombre": form.nombre.data,
+        "apellido": form.apellido.data,
+        "telefono": form.telefono.data,
+        "mail": form.email.data
+    }
+    r = requests.put(f'{current_app.config["API_URL"]}/usuario/{id}', headers={"content-type": "application/json"}, json = usuario, auth=BearerAuth(str(request.cookies['access_token'])))
+
+    if r.status_code == 201:
+
+        return redirect(url_for('admin.editar_perfil', id = id))
 
 @admin.route('/bolsones-venta')
 def bolsones_venta():
@@ -189,3 +208,23 @@ def ver_compra(id):
 @admin.route('/ver-perfil/<int:id>')
 def ver_perfil(id):
     pass
+
+
+@admin.route('/retirado/<int:id>', methods=['POST', 'GET'])
+def bolson_retirado(id):
+
+    data = {
+        'retirado': 1
+    }
+
+    r = requests.put(
+        f'{current_app.config["API_URL"]}/compra/{id}',
+        headers={"content-type": "application/json"},
+        json = data,
+        auth=BearerAuth(str(request.cookies['access_token']))
+    )
+
+    if r.status_code == 201:
+        return redirect(url_for('admin.compras'))
+    else:
+        return f'<h1>{r.status_code}</h1>'
