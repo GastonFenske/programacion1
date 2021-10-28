@@ -34,7 +34,7 @@
             <div class="d-flex justify-content-center">
                 <h3>Editar producto</h3>
             </div>
-            <form class="pt-3" action="{{ url_for('proveedor.agregar_producto') }}" method="POST">
+            <form class="pt-3" action="{{ url_for('proveedor.actualizar_producto', id = id) }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
                 <div class="mb-3">

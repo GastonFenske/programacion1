@@ -61,9 +61,9 @@ class BolsonPendiente(Resource):
     def put(self, id):
         bolsonpendiente = db.session.query(BolsonModel).get_or_404(id)
         data = request.get_json().items()
-        for key, value in data:
-            setattr(bolsonpendiente, key, value)
         if bolsonpendiente.aprobado == 0:
+            for key, value in data:
+                setattr(bolsonpendiente, key, value)
             db.session.add(bolsonpendiente)
             db.session.commit()
             return bolsonpendiente.to_json(), 201

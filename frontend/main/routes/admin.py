@@ -103,6 +103,47 @@ def bolsones_venta():
 
     return render_template('verbolsonesventaadmin.html', bg_color = 'bg-dark', bolsones = bolsones, page = page, pages = pages)
 
+@admin.route('/bolsones-pendientes')
+def bolsones_pendientes():
+    page = {
+        "page": 1
+    }
+    r = requests.get(
+        f'{current_app.config["API_URL"]}/bolsones-pendientes',
+        headers={"content-type": "applications/json"},
+        json = page,
+        auth=BearerAuth(str(request.cookies['access_token']))
+    )
+    bolsones = json.loads(r.text)["bolsonespendientes"]
+    page = json.loads(r.text)["page"]
+    pages = json.loads(r.text)["pages"]
+
+    return render_template('bolsones_pendientes_admin.html', bg_color = 'bg-dark', bolsones = bolsones, page = page, pages = pages)
+
+@admin.route('/eliminar-bolson-pendiente/<int:id>')
+def eliminar_bolson_pendiente(id):
+    r = requests.delete(
+        f'{current_app.config["API_URL"]}/bolson-pendiente/{id}',
+        headers={"content-type": "application/json"},
+        auth=BearerAuth(str(request.cookies['access_token']))
+    )
+    if r.status_code == 204:
+        return redirect(url_for('admin.bolsones_pendientes'))
+
+@admin.route('/vender-bolson/<int:id>')
+def vender_bolson(id):
+    data = {
+        "aprobado": 1
+    }
+    r = requests.put(
+        f'{current_app.config["API_URL"]}/bolson-pendiente/{id}',
+        headers={"content-type": "application/json"},
+        json = data,
+        auth=BearerAuth(str(request.cookies['access_token']))
+    )
+    if r.status_code == 201:
+        return redirect(url_for('admin.bolsones_pendientes'))
+
 
 @admin.route('/agregar-bolson', methods=['POST', 'GET'])
 @login_required
@@ -141,7 +182,7 @@ def agregar_bolson():
 
         productos = [form.producto.data, form.producto2.data, form.producto3.data, form.producto4.data, form.producto5.data]
         for producto in productos:
-            if producto != 0:
+            if producto != '0':
                 print('it works')
                 data = {
                     'productoId': producto,
@@ -150,10 +191,12 @@ def agregar_bolson():
                 }
                 try:
                     r = requests.post(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json=data, auth=BearerAuth(str(request.cookies['access_token'])))
+
                 except:
                     pass
             else:
-                print('it doesnt work')
+                print('it doesnt work')                
+        return redirect(url_for('admin.agregar_bolson'))
 
     return render_template('agregarbolson.html', title='Admin', bg_color='bg-secondary', form = form)
 
@@ -228,3 +271,4 @@ def bolson_retirado(id):
         return redirect(url_for('admin.compras'))
     else:
         return f'<h1>{r.status_code}</h1>'
+
