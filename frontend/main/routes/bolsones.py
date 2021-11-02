@@ -4,6 +4,7 @@ from flask.templating import render_template_string
 import requests, json
 from main.routes.auth import BearerAuth
 from flask_login import current_user
+from main.forms.bolson_form import BolsonForm
 
 bolsones = Blueprint('bolsones', __name__, url_prefix='/bolsones')
 
@@ -42,29 +43,51 @@ def venta(page):
 
     return render_template('bolsoneshome.html', bg_color='bg-secondary', title='Bolsones', bolsones = bolsones, page = page, pages = pages)
 
+
+def cargar_productos_de_un_bolson(id: int):
+    r = requests.get(f'{current_app.config["API_URL"]}/bolson-venta/{id}', headers={"content-type": "applications/json"}, json={})
+    bolson = json.loads(r.text)
+    data = {
+        "bolsonId": int(id)
+    }
+    
+    r = requests.get(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json = data)
+
+    productos = json.loads(r.text)["productosbolsones"]
+
+    return bolson, productos
+
 @bolsones.route('/ver/<int:id>')
 def ver(id):
 
-    r = requests.get(f'{current_app.config["API_URL"]}/bolson-venta/{id}', headers={"content-type": "applications/json"}, json={})
+    # r = requests.get(f'{current_app.config["API_URL"]}/bolson-venta/{id}', headers={"content-type": "applications/json"}, json={})
 
-    bolson = json.loads(r.text)
+    # bolson = json.loads(r.text)
+    # bolsonId = bolson["id"]
+    # nombre = bolson["nombre"]
+    # fecha = bolson["fecha"]
+    # imagen = bolson["imagen"]
+    # descripcion = bolson["descripcion"]
+
+    # json_api = {
+	#     "bolsonId": int(id)
+    # }
+
+    # r = requests.get(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json = json_api)
+
+
+    # productos = json.loads(r.text)["productosbolsones"]
+
+    bolson, productos = cargar_productos_de_un_bolson(id)
     bolsonId = bolson["id"]
     nombre = bolson["nombre"]
     fecha = bolson["fecha"]
     imagen = bolson["imagen"]
     descripcion = bolson["descripcion"]
 
-    json_api = {
-	    "bolsonId": int(id)
-    }
-
-    r = requests.get(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json = json_api)
-
-
-    productos = json.loads(r.text)["productosbolsones"]
 
     return render_template('verbolson.html', title = f'{nombre}', bg_color = "bg-secondary", 
-    nombre = nombre, imagen = imagen, descripcion = descripcion, productos = productos
+    nombre = nombre, imagen = imagen, descripcion = descripcion, productos = productos, id = id
     )
 
 
@@ -92,4 +115,85 @@ def reservar(id: int):
     )
     if r.status_code == 201:
         return redirect(url_for('cliente.compras'))
+
+def cargar_un_bolson(id: int, tipo_bolson: int):
+    bolson = {
+        1: 'bolson-pendiente',
+        2: 'bolson-venta',
+        3: 'bolson-previo'
+    }
+    form = BolsonForm()
+
+        #Traigo los productos
+    data = {
+            'per_page': 10
+        }
+
+    r = requests.get(f'{current_app.config["API_URL"]}/productos', headers={"content-type": "application/json"}, json = data)
+    productos = json.loads(r.text)["productos"]
+
+    productos = [(producto['id'], producto['nombre'])  for producto in productos]
+    productos.insert(0, (0, '--Seleccionar producto'))
+
+    form.producto.choices = productos
+    form.producto2.choices = productos
+    form.producto3.choices = productos
+    form.producto4.choices = productos
+    form.producto5.choices = productos
+    if not form.is_submitted():
+        r = requests.get(
+            f'{current_app.config["API_URL"]}/{bolson[tipo_bolson]}/{int(id)}',
+            headers={"content-type": "application/json"},
+            auth=BearerAuth(str(request.cookies['access_token']))
+        )
+    try:
+        bolson = json.loads(r.text)
+        form.nombre.data = bolson['nombre']
+        form.descripcion.data = bolson['descripcion']
+        form.imagen.data = bolson['imagen']
+        form.venta.data = bolson['aprobado']
+
+
+
+        data = {
+            'bolsonId': int(id)
+        }
+        r = requests.get(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json = data)
+
+        #Tengo los productos que ya tiene ese bolson
+        productos = json.loads(r.text)["productosbolsones"]
+        # print(productos)
+        #productos = [p['producto']['nombre'] for p in productos]
+
+        # print(productos)
+        productos_selects = [form.producto.data, form.producto2.data, form.producto3.data, form.producto4.data, form.producto5.data]
+
+        form.producto.data = int(productos[0]['producto']['id'])
+        form.producto2.data = int(productos[1]['producto']['id'])
+
+
+
+        form.producto3.data = int(productos[2]['producto']['id'])
+        form.producto4.data = int(productos[3]['producto']['id'])
+        form.producto5.data = int(productos[4]['producto']['id'])
+
+        # num = 0
+        # for p in productos:
+        #     productos_selects[num] = int(p['producto']['id'])
+        #     num += 1
+
+    except:
+        pass
+
+    return form
+
+
+@bolsones.route('/editar-bolson/<int:id>')
+def editar_bolson(id):
+    form = cargar_un_bolson(id, 2)
+    return render_template('editar_bolson.html', bg_color='bg-secondary', title='Editar Bolson', form = form)
+
+@bolsones.route('/actualizar-bolson/<int:id>')
+def actualizar_bolson(id):
+    pass
 

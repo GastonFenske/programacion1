@@ -43,7 +43,7 @@
       {% endfor %}
   </ul>
   <div class="card-body d-grid">
-    <a href="#" class="btn btn-success my-2">Reservar</a>
+    <a href="{{url_for('bolsones.reservar', id = id)}}" class="btn btn-success my-2">Reservar</a>
     <a href="{{url_for('bolsones.venta', page = 1)}}" class="btn btn-warning text-white my-2">Ver mas bolsones</a>
   </div>
 </div>

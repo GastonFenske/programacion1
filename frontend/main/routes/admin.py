@@ -5,9 +5,10 @@ import requests, json
 from werkzeug.datastructures import Headers 
 from flask_login import current_user, login_required, LoginManager
 from .auth import admin_required
-from main.forms import PerfilForm, BolsonForm
+from main.forms import PerfilForm, BolsonForm, BolsonFilterForm
 from main.routes.auth import BearerAuth
 from .clientes import cargar_un_perfil
+from .bolsones import cargar_productos_de_un_bolson
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -92,6 +93,8 @@ def actualizar_perfil(id):
 @admin.route('/bolsones-venta')
 def bolsones_venta():
 
+    form = BolsonFilterForm()
+
     page = {
         "page": 1
     }
@@ -101,7 +104,7 @@ def bolsones_venta():
     pages = json.loads(r.text)["pages"]
 
 
-    return render_template('verbolsonesventaadmin.html', bg_color = 'bg-dark', bolsones = bolsones, page = page, pages = pages)
+    return render_template('verbolsonesventaadmin.html', bg_color = 'bg-dark', bolsones = bolsones, page = page, pages = pages, form = form)
 
 @admin.route('/bolsones-pendientes')
 def bolsones_pendientes():
@@ -246,7 +249,14 @@ def ver_compra(id):
 
     compra = json.loads(r.text)
 
-    return render_template('ver_compra_admin.html', bg_color = 'bg-dark', title = 'Ver compra', compra = compra)
+    json_api = {
+	    "bolsonId": compra['bolson']['id']
+    }
+
+    r = requests.get(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json = json_api)
+    productos = json.loads(r.text)["productosbolsones"]
+
+    return render_template('ver_compra_admin.html', bg_color = 'bg-dark', title = 'Ver compra', compra = compra, productos = productos)
 
 @admin.route('/ver-perfil/<int:id>')
 def ver_perfil(id):
@@ -271,4 +281,6 @@ def bolson_retirado(id):
         return redirect(url_for('admin.compras'))
     else:
         return f'<h1>{r.status_code}</h1>'
+
+
 

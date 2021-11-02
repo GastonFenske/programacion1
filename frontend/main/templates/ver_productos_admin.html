@@ -70,7 +70,7 @@
               <tr class="">
                 <th scope="col">Id</th>
                 <th scope="col">Nombre</th>
-                <th scope="col">Proveedor Id</th>
+                <th scope="col">Proveedor</th>
                 <th scope="col">Accion</th>
               </tr>
             </thead>
@@ -83,7 +83,7 @@
                   <td>
                       <a href="#" class="text-white">
                         
-                        {{ producto['usuario']['id'] }}
+                        {{ producto['usuario']['nombre'] + ' ' + producto['usuario']['apellido'] }}
                       </a>
                   </td>
                   <td>

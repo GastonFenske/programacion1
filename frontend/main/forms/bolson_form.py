@@ -35,9 +35,9 @@ class BolsonForm(FlaskForm):
         'Seleccionar producto #1',
         [
             validators.Required(message = 'Este campo es requiredo')
-        ]
+        ],
         # choices = [],
-        # coerce=int
+        coerce=int
     )
 
     # cantidad_producto = IntegerField(
@@ -49,26 +49,26 @@ class BolsonForm(FlaskForm):
 
     producto2 = SelectField(
         'Seleccionar producto #2',
-        choices = []
-        # coerce=int
+        #choices = []
+        coerce=int
     )
 
     producto3 = SelectField(
         'Seleccionar producto #3',
-        choices = [],
-        # coerce=int
+        #choices = [],
+        coerce=int
     )
 
     producto4 = SelectField(
         'Seleccionar producto #4',
-        choices = []
-        # coerce=int
+        #choices = []
+        coerce=int
     )
 
     producto5 = SelectField(
         'Seleccionar producto #5',
-        choices = []
-        # coerce=int
+        #choices = []
+        coerce=int
     )
 
     imagen = StringField(
@@ -82,4 +82,12 @@ class BolsonForm(FlaskForm):
         'Agregar bolson'
     )
 
+class BolsonFilterForm(FlaskForm):
+    id = IntegerField(
+        'Filtrar bolson mediante Id',
+        [
+            validators.Required(message = 'Este campo es requerido')
+        ]
+    )
+    submit = SubmitField()
     

@@ -89,7 +89,7 @@
                     </td>
                     <td>
                         <div>
-                            <a href="#" class="btn btn-primary">
+                            <a href="{{url_for('bolsones.editar_bolson', id = bolson['id'])}}" class="btn btn-primary">
                                 Editar
                             </a>
                             <a href="{{url_for('bolsones.eliminar', id = bolson['id'])}}" class="btn btn-danger">

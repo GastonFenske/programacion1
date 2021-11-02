@@ -4,6 +4,7 @@ from .bolsones import traer_bolsones
 import requests, json
 from flask_login import current_user
 from main.routes.auth import BearerAuth
+from .bolsones import cargar_productos_de_un_bolson
 
 cliente = Blueprint('cliente', __name__, url_prefix='/cliente')
 
@@ -35,20 +36,21 @@ def compras():
 @cliente.route('/ver-compra/<id>')
 def compra(id):
 
-
-
     r = requests.get(f'{current_app.config["API_URL"]}/compra/{id}', headers={"content-type": "applications/json"}, json={}, auth= BearerAuth(str(request.cookies['access_token'])))
 
     compra = json.loads(r.text)
     print(compra)
+    print(compra['bolson']['imagen'], 'La imagen de este bolson')
 
     json_api = {
-	    "bolsonId": int(id)
+	    "bolsonId": compra['bolson']['id']
     }
 
     r = requests.get(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json = json_api)
 
     productos = json.loads(r.text)["productosbolsones"]
+    print(r.status_code)
+    print(productos, 'Los productos de esta compra')
 
     return render_template('vercompra.html', bg_color = 'bg-secondary', title='Bolsones Store', compra = compra, productos = productos)
 
@@ -79,3 +81,7 @@ def perfil(id):
     form = cargar_un_perfil(id)
     return render_template('editarperfil.html', bg_color = 'bg-secondary', form = form, title='Bolsones Store')
 
+
+@cliente.route('/reservar-bolson/<int:id>')
+def reservar_bolson(id):
+    pass

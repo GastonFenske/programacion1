@@ -79,7 +79,7 @@
                 <p>Fecha compra: {{ compra['fecha_hora_compra'] }}</p>
   
                 <div class="d-flex mt-4">
-                  <a href="{{url_for('cliente.compra', id = compra['bolson']['id'])}}" class="btn-own bg-primary me-2">
+                  <a href="{{url_for('cliente.compra', id = compra['id'])}}" class="btn-own bg-primary me-2">
                       <!-- <div class="btn-own bg-primary me-2">Detalles</div> -->
                       Detalles
                   </a>

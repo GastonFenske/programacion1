@@ -17,7 +17,7 @@ class ProductoBolson(db.Model):
             'id': self.id,
             # 'cantidad': self.cantidad,
             'producto': self.producto.to_json(),
-            'bolson': self.bolson.to_json()
+            #'bolson': self.bolson.to_json()
         }
         return productobolson_json
 
