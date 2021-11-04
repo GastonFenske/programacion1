@@ -170,8 +170,7 @@ def cargar_un_bolson(id: int, tipo_bolson: int):
 
         form.producto.data = int(productos[0]['producto']['id'])
         form.producto2.data = int(productos[1]['producto']['id'])
-
-
+    
 
         form.producto3.data = int(productos[2]['producto']['id'])
         form.producto4.data = int(productos[3]['producto']['id'])

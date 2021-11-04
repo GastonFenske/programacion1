@@ -105,7 +105,8 @@
             </div>
     
             <div class="col-md-6">
-
+            {#form.producto.data#}
+            {#if form.producto.data == 1 #}  
               <div class="mb-3" id="producto2">
                 <label for="">Producto #2</label>
                 <div class="d-flex">
@@ -116,6 +117,14 @@
                     </button> 
                 </div>
             </div>
+            {#else#}
+
+              <!-- <div class="mb-3">
+                <label for="">Producto #2</label>
+                {# show_field_no_label(form.producto2, class='form-control form-select input') #}
+              </div> -->
+
+            {#endif#}
 
               <div class="d-grid mb-3" id="add-producto2">
                 <button type="button" class="btn btn-success mt-4" id="add-bolson">

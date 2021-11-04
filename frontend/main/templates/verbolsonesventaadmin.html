@@ -1,4 +1,5 @@
 {% extends 'main.html' %}
+{% from 'macros/form_macros.html' import show_field_no_label, show_submit, show_switch, show_field %}
 
 {% block head %}
     {{ super() }}
@@ -40,15 +41,18 @@
 
               <div class="col-md-4">
                   <form class="">
-      
+                    
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
   
                               <div class="d-flex flex-column">
-                                  <label for="exampleInputEmail1" class="form-label">Filtrar bolson by Id</label>
+                                  <label for="exampleInputEmail1" class="form-label">Filtrar bolson mediante Id</label>
                                   <div class="d-flex">
-                                      <input type="number" class="form-control me-3 rounded" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa un id">
-                                      <button type="submit" class="btn btn-primary px-3 rounded-3">
+                                      <!-- <input type="number" class="form-control me-3 rounded" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa un id"> -->
+                                      {{show_field_no_label(form.id, class='form-control me-3 rounded', placeholder='Ingresa un id')}}
+                                      <!-- <button type="submit" class="btn btn-primary px-3 rounded-3">
                                           <i class="fas fa-search"></i>
-                                      </button>
+                                      </button> -->
+                                      {{show_submit(form.submit, class='btn btn-primary px-3 rounded-3')}}
                                   </div>
   
                               </div>

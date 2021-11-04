@@ -5,7 +5,7 @@ import requests, json
 from werkzeug.datastructures import Headers 
 from flask_login import current_user, login_required, LoginManager
 from .auth import admin_required
-from main.forms import PerfilForm, BolsonForm, BolsonFilterForm
+from main.forms import PerfilForm, BolsonForm, BolsonFilterForm, FilterProductoForm, FilterCompraForm
 from main.routes.auth import BearerAuth
 from .clientes import cargar_un_perfil
 from .bolsones import cargar_productos_de_un_bolson
@@ -205,20 +205,50 @@ def agregar_bolson():
 
 @admin.route('/ver-productos')
 def productos():
+    form = FilterProductoForm(request.args, meta={'csrf': False})
+    data = {
+        "per_page": 10
+    }
+
+    r = requests.get(
+        f'{current_app.config["API_URL"]}/proveedores',
+        headers={"content-type": "application/json"},
+        json = data
+    )
+    proveedores = json.loads(r.text)["proveedores"]
+    proveedores = [(proveedor['id'], f'{proveedor["nombre"]} {proveedor["apellido"]}')  for proveedor in proveedores]
+    proveedores.insert(0, (0, '--Seleccionar proveedor'))
+
+    form.proveedor.choices = proveedores
+
+
 
     data = {
         'per_page': 15
     }
 
-    r = requests.get(f'{current_app.config["API_URL"]}/productos', headers={"content-type": "application/json"}, json = data, auth=BearerAuth(str(request.cookies['access_token'])))
+    if form.submit():
+        print('Funciona cuando tocas')
+        if form.proveedor.data != None and form.proveedor.data != 0:
+            data['usuarioId'] = int(form.proveedor.data)
 
 
+    print(data)
+
+    r = requests.get(
+        f'{current_app.config["API_URL"]}/productos', 
+        headers={"content-type": "application/json"}, 
+        json = data, 
+        auth=BearerAuth(str(request.cookies['access_token']))
+    )
 
     productos = json.loads(r.text)['productos']
     page = json.loads(r.text)['page']
     pages = json.loads(r.text)['pages']
 
-    return render_template('ver_productos_admin.html', bg_color = 'bg-dark', title = 'Admin', productos = productos, page = page, pages= pages)
+    return render_template('ver_productos_admin.html', bg_color = 'bg-dark', title = 'Admin', productos = productos, page = page, pages= pages, form  = form)
+
+
 
 @admin.route('/producto-eliminar/<int:id>')
 def eliminar_producto(id):
@@ -230,9 +260,27 @@ def eliminar_producto(id):
 @admin.route('/compras')
 def compras():
 
-    data = {
+    filter = FilterCompraForm(request.args, meta={'csrf': False})
 
+    compras = [(1, 'Compras retiradas'), (2, 'Compras pendientes')]
+    compras.insert(0, (0, '--Seleccionar status'))
+
+    status = {
+        1: 1,
+        2: 0
     }
+
+    filter.status.choices = compras
+
+    data = {
+        "per_page": 10
+    }
+
+    if filter.submit():
+        if filter.status.data != None and filter.status.data != 0:
+            data['retirado'] = int(status[filter.status.data])
+
+
 
     r = requests.get(f'{current_app.config["API_URL"]}/compras', headers={"content-type": "application/json"}, json = data, auth=BearerAuth(str(request.cookies['access_token'])))
 
@@ -240,7 +288,7 @@ def compras():
     page = json.loads(r.text)['page']
     pages = json.loads(r.text)['pages']
 
-    return render_template('compras_admin.html', bg_color = 'bg-dark', title = 'Panel Admin', compras = compras)
+    return render_template('compras_admin.html', bg_color = 'bg-dark', title = 'Panel Admin', compras = compras, filter = filter)
 
 @admin.route('/compra/<int:id>')
 def ver_compra(id):

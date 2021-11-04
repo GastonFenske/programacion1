@@ -57,6 +57,8 @@ class Compras(Resource):
                     compras = compras.filter(CompraModel.usuarioId == value)
                 elif key == "bolsonId":
                     compras = compras.filter(CompraModel.bolsonId == value)
+                elif key == 'retirado':
+                    compras = compras.filter(CompraModel.retirado == int(value))
                 elif key == 'page':
                     page = int(value)
                 elif key == 'per_page':

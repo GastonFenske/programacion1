@@ -89,5 +89,7 @@ class BolsonFilterForm(FlaskForm):
             validators.Required(message = 'Este campo es requerido')
         ]
     )
-    submit = SubmitField()
+    submit = SubmitField(
+        'Filtrar'
+    )
     
