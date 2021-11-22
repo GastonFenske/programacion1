@@ -7,7 +7,49 @@
 
 {% block content %}
 
+  {% if current_user.role == 'admin' %}
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+    <div class="container pt-2 pb-2">
+      <a class="navbar-brand" href="{{ url_for('admin.home') }}">Bolsones Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active me-3" href="{{url_for('admin.home')}}">Panel admin</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary py-2 px-4" href="{{ url_for('main.logout') }}" tabindex="-1" aria-disabled="true">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% elif current_user.role == 'proveedor' %}
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+    <div class="container pt-2 pb-2">
+      <a class="navbar-brand" href="{{ url_for('proveedor.home') }}">Bolsones Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active me-3" href="{{url_for('proveedor.home')}}">Panel proveedor</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary py-2 px-4" href="{{ url_for('main.logout') }}" tabindex="-1" aria-disabled="true">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  {% else %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
       <div class="container pt-2 pb-2">
         <a class="navbar-brand" href="{{ url_for('main.index') }}">Bolsones Store</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +66,8 @@
           </ul>
         </div>
       </div>
-  </nav>
+    </nav>
+  {% endif %}
           
 
 
@@ -51,10 +94,12 @@
                     <div class="btn-own bg-danger me-2">Ver mas</div>
                 </a>
 
-                <a href="#">
-                    <div class="btn-own bg-success">Reservar</div>
-                </a>
-              </div>
+                {% if current_user.role == 'cliente' %}
+                  <a href="#">
+                      <div class="btn-own bg-success">Reservar</div>
+                  </a>
+                {% endif %}
+                </div>
           
           </div>
 

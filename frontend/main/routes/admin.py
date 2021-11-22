@@ -1,12 +1,11 @@
 from logging import log, logMultiprocessing
-from flask import redirect, render_template, url_for, Blueprint, current_app, request
+from flask import redirect, render_template, url_for, Blueprint, current_app, request, flash
 import requests, json
-
 from werkzeug.datastructures import Headers 
 from flask_login import current_user, login_required, LoginManager
 from .auth import admin_required
 from main.forms import PerfilForm, BolsonForm, BolsonFilterForm, FilterProductoForm, FilterCompraForm
-from main.routes.auth import BearerAuth
+from main.routes.auth import BearerAuth, role_required
 from .clientes import cargar_un_perfil
 from .bolsones import cargar_productos_de_un_bolson
 
@@ -15,6 +14,7 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 
 @admin.route('/home')
 @login_required
+@role_required(roles=['admin'])
 def home():
     return render_template('homeadmin.html', title='Admin', bg_color="bg-dark")
 
@@ -76,6 +76,7 @@ def editar_perfil(id):
 
 
 @admin.route('/actualizar-perfil/<int:id>', methods=['POST'])
+@login_required
 def actualizar_perfil(id):
     form = cargar_un_perfil(id)    
     usuario = {
@@ -90,13 +91,14 @@ def actualizar_perfil(id):
 
         return redirect(url_for('admin.editar_perfil', id = id))
 
-@admin.route('/bolsones-venta')
-def bolsones_venta():
+@admin.route('/bolsones-venta/<int:page>')
+@login_required
+def bolsones_venta(page: int):
 
     form = BolsonFilterForm()
 
     page = {
-        "page": 1
+        "page": page
     }
     r = requests.get(f'{current_app.config["API_URL"]}/bolsones-venta', headers={"content-type": "application/json"}, json=page)
     bolsones = json.loads(r.text)["bolsonesventa"]
@@ -107,6 +109,7 @@ def bolsones_venta():
     return render_template('verbolsonesventaadmin.html', bg_color = 'bg-dark', bolsones = bolsones, page = page, pages = pages, form = form)
 
 @admin.route('/bolsones-pendientes')
+@login_required
 def bolsones_pendientes():
     page = {
         "page": 1
@@ -124,6 +127,7 @@ def bolsones_pendientes():
     return render_template('bolsones_pendientes_admin.html', bg_color = 'bg-dark', bolsones = bolsones, page = page, pages = pages)
 
 @admin.route('/eliminar-bolson-pendiente/<int:id>')
+@login_required
 def eliminar_bolson_pendiente(id):
     r = requests.delete(
         f'{current_app.config["API_URL"]}/bolson-pendiente/{id}',
@@ -134,6 +138,7 @@ def eliminar_bolson_pendiente(id):
         return redirect(url_for('admin.bolsones_pendientes'))
 
 @admin.route('/vender-bolson/<int:id>')
+@login_required
 def vender_bolson(id):
     data = {
         "aprobado": 1
@@ -204,6 +209,7 @@ def agregar_bolson():
     return render_template('agregarbolson.html', title='Admin', bg_color='bg-secondary', form = form)
 
 @admin.route('/ver-productos')
+@login_required
 def productos():
     form = FilterProductoForm(request.args, meta={'csrf': False})
     data = {
@@ -251,13 +257,20 @@ def productos():
 
 
 @admin.route('/producto-eliminar/<int:id>')
+@login_required
 def eliminar_producto(id):
 
-    r = requests.delete(f'{current_app.config["API_URL"]}/producto/{id}', headers={"content-type": "application/json"}, auth=BearerAuth(str(request.cookies['access_token'])))
 
-    return redirect(url_for('admin.productos'))
+    r = requests.delete(f'{current_app.config["API_URL"]}/producto/{id}', headers={"content-type": "application/json"}, auth=BearerAuth(str(request.cookies['access_token'])))
+    if r.status_code == 204:
+        return redirect(url_for('admin.productos'))
+    elif r.status_code == 404:
+        flash('El producto no puede ser eliminado porque esta siendo vendido en uno o mas bolsones', 'danger')
+        return redirect(url_for('admin.productos'))      
+
 
 @admin.route('/compras')
+@login_required
 def compras():
 
     filter = FilterCompraForm(request.args, meta={'csrf': False})
@@ -291,6 +304,7 @@ def compras():
     return render_template('compras_admin.html', bg_color = 'bg-dark', title = 'Panel Admin', compras = compras, filter = filter)
 
 @admin.route('/compra/<int:id>')
+@login_required
 def ver_compra(id):
 
     r = requests.get(f'{current_app.config["API_URL"]}/compra/{id}', headers={"content-type": "application/json"}, auth=BearerAuth(str(request.cookies['access_token'])))
@@ -307,11 +321,13 @@ def ver_compra(id):
     return render_template('ver_compra_admin.html', bg_color = 'bg-dark', title = 'Ver compra', compra = compra, productos = productos)
 
 @admin.route('/ver-perfil/<int:id>')
+@login_required
 def ver_perfil(id):
     pass
 
 
 @admin.route('/retirado/<int:id>', methods=['POST', 'GET'])
+@login_required
 def bolson_retirado(id):
 
     data = {

@@ -18,7 +18,7 @@ class BolsonesVenta(Resource):
     @jwt_required(optional=True)
     def get(self):
         page = 1
-        per_page = 5
+        per_page = 8
         bolsones = db.session.query(BolsonModel).filter(BolsonModel.aprobado == 1)   
         if request.get_json():
             filters = request.get_json().items()
@@ -28,7 +28,7 @@ class BolsonesVenta(Resource):
                 elif key == 'per_page':
                     per_page = int(value)
                     
-        bolsones = bolsones.paginate(page, per_page, True, 5)
+        bolsones = bolsones.paginate(page, per_page, True, 8)
         return jsonify({
             'bolsonesventa': [bolson.to_json() for bolson in bolsones.items if bolson.aprobado == 1],
             'total': bolsones.total,

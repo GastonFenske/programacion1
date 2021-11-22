@@ -3,6 +3,9 @@ from flask import request, flash, redirect, url_for
 from flask_login import UserMixin, LoginManager, current_user
 import jwt
 import requests
+from functools import wraps
+
+
 
 class User(UserMixin):
     def __init__(self, id, email, role):
@@ -50,3 +53,18 @@ class BearerAuth(requests.auth.AuthBase):
     def __call__(self, r):
         r.headers["authorization"] = "Bearer " + self.token
         return r 
+
+def role_required(roles: list):
+    def decorator(function):
+        @wraps(function)
+        def wrapper(*args, **kwargs):
+            if not current_user.role in roles:
+                flash('Acceso restringido.','warning')
+                if current_user.role == 'proveedor':
+                    return redirect(url_for('proveedor.home'))
+                if current_user.role == 'cliente':
+                    return redirect(url_for('cliente.bolsones_venta', page = 1))
+            return function(*args, **kwargs)
+        return wrapper
+    return decorator
+

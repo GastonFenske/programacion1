@@ -60,24 +60,6 @@ def cargar_productos_de_un_bolson(id: int):
 @bolsones.route('/ver/<int:id>')
 def ver(id):
 
-    # r = requests.get(f'{current_app.config["API_URL"]}/bolson-venta/{id}', headers={"content-type": "applications/json"}, json={})
-
-    # bolson = json.loads(r.text)
-    # bolsonId = bolson["id"]
-    # nombre = bolson["nombre"]
-    # fecha = bolson["fecha"]
-    # imagen = bolson["imagen"]
-    # descripcion = bolson["descripcion"]
-
-    # json_api = {
-	#     "bolsonId": int(id)
-    # }
-
-    # r = requests.get(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json = json_api)
-
-
-    # productos = json.loads(r.text)["productosbolsones"]
-
     bolson, productos = cargar_productos_de_un_bolson(id)
     bolsonId = bolson["id"]
     nombre = bolson["nombre"]
@@ -99,7 +81,7 @@ def eliminar(id):
         auth= BearerAuth(str(request.cookies['access_token']))
     )
     if r.status_code == 204:
-        return redirect(url_for('admin.bolsones_venta'))
+        return redirect(url_for('admin.bolsones_venta', page = 1))
 
 @bolsones.route('/reservar/<int:id>', methods=['POST', 'GET'])
 def reservar(id: int):
