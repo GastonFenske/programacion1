@@ -151,4 +151,4 @@ def actualizar_producto(id):
     )
     if r.status_code == 201:
         flash('Producto actualizado con exito', 'success')
-        return redirect(url_for('proveedor.ver_productos', id = id))
+        return redirect(url_for('proveedor.ver_productos', page = 1))
