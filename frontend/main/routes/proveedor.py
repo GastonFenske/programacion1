@@ -69,17 +69,19 @@ def agregar_producto():
         }
         r = requests.post(f'{current_app.config["API_URL"]}/productos', headers={"content-type": "application/json"}, json = producto, auth=BearerAuth(str(request.cookies['access_token'])))
         if r.status_code == 200:
-            return redirect(url_for('proveedor.ver_productos'))
+            flash('Producto agregado con exito', 'success')
+            return redirect(url_for('proveedor.ver_productos', page = 1))
 
     return render_template('agregar_producto.html', tittle='Proveedor', bg_color = 'bg-primary', form = form)
 
-@proveedor.route('/ver-productos')
+@proveedor.route('/ver-productos/<int:page>')
 @login_required
 @role_required(roles=['proveedor'])
-def ver_productos():
+def ver_productos(page):
 
     data = {
-        "usuarioId": current_user.id
+        "usuarioId": current_user.id,
+        "page": page
     }
 
     r = requests.get(
@@ -107,11 +109,11 @@ def eliminar_producto(id):
 
     if r.status_code == 204:
 
-        return redirect(url_for('proveedor.ver_productos'))
+        return redirect(url_for('proveedor.ver_productos', page = 1))
 
     elif r.status_code == 404:
         flash('El producto no puede ser eliminado porque esta siendo vendido en uno o mas bolsones', 'danger')
-        return redirect(url_for('proveedor.ver_productos'))
+        return redirect(url_for('proveedor.ver_productos', page = 1))
 
 @proveedor.route('/editar-producto/<int:id>')
 @login_required
@@ -148,5 +150,5 @@ def actualizar_producto(id):
         auth=BearerAuth(str(request.cookies['access_token']))
     )
     if r.status_code == 201:
-
+        flash('Producto actualizado con exito', 'success')
         return redirect(url_for('proveedor.ver_productos', id = id))

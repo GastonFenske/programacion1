@@ -32,10 +32,20 @@
   <div class="container">
 
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+     {% endif %}
+    {% endwith %}
           
     <div class="row">
 
-        <div class="d-flex justify-content-center">
+        <!-- <div class="d-flex justify-content-center">
 
             <div class="col-md-4">
                 <form class="">
@@ -57,7 +67,7 @@
     
             </div>
 
-        </div>
+        </div> -->
 
 
     </div>
@@ -88,7 +98,7 @@
                   </td>
                   <td>
                       <div>
-                          <a href="#" class="btn btn-primary">
+                          <a href="{{ url_for('bolsones.editar_bolson', id = bolson['id']) }}" class="btn btn-primary">
                               Editar
                           </a>
                           <a href="{{url_for('admin.eliminar_bolson_pendiente', id = bolson['id'])}}" class="btn btn-danger">
@@ -134,25 +144,42 @@
     </div>
 
 
-    <div class="container my-5 p-0">
-        <nav aria-label="" class="">
-            <ul class="pagination">
+    <div class="my-5">
+      <nav aria-label="...">
+          <ul class="pagination m-0">
+            {% if page > 1 %}
               <li class="page-item">
-                <a class="page-link bg-forms pag-back" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                <a class="page-link bg-forms pag-back" href="{{url_for('admin.bolsones_pendientes', page = page - 1)}}" tabindex="-1" aria-disabled="true">Anterior</a>
               </li>
-              <li class="page-item"><a class="page-link bg-contrast" href="#">1</a></li>
-              <li class="page-item" aria-current="page">
-                <a class="page-link bg-forms" href="#">2</a>
-              </li>
-              <li class="page-item">
-                  <a class="page-link bg-forms" href="#">3</a>
+            {% else %}
+              <a class="page-link bg-forms pag-back" href="{{url_for('admin.bolsones_pendientes', page = pages)}}" tabindex="-1" aria-disabled="true">Anterior</a>
+            {% endif %}
+
+            {% for i in range(pages) %}
+              {% if i+1 == page %}
+                <li class="page-item"><a class="page-link bg-contrast" href="{{url_for('admin.bolsones_pendientes', page = i + 1)}}">{{i+1}}</a></li>
+              {% else %}
+                <li class="page-item"><a class="page-link bg-forms" href="{{url_for('admin.bolsones_pendientes', page = i + 1)}}">{{i+1}}</a></li>
+              {% endif %}
+            {% endfor %}
+
+
+                <li class="page-item">
+
+                  {% if page + 1 <= pages %}
+
+                    <a class="page-link bg-forms pag-next" href="{{url_for('admin.bolsones_pendientes', page = page + 1)}}">Siguiente</a>
+
+                  {% else %}
+                    <a class="page-link bg-forms pag-next" href="{{url_for('admin.bolsones_pendientes', page = 1)}}">Siguiente</a>
+
+                  {% endif %}
+
                 </li>
-              <li class="page-item">
-                <a class="page-link bg-forms pag-next" href="#">Siguiente</a>
-              </li>
-            </ul>
-          </nav>
-    </div>
+          </ul>
+
+        </nav>
+  </div>
 
 
 

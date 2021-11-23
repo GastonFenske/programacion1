@@ -291,3 +291,9 @@ border-radius: 50%;
 .hidden {
     display: none!important;
 }
+
+.alert-success{
+    background-color: var(--primary)!important;
+    border: none;
+    color: #fff;
+}

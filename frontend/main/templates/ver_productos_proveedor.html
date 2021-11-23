@@ -16,7 +16,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
           <li class="nav-item">
-            <a class="nav-link active me-3" href="{{ url_for('proveedor.home') }}">Panel proveecor</a>
+            <a class="nav-link active me-3" href="{{ url_for('proveedor.home') }}">Panel proveedor</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active me-3 link-designated" href="{{url_for('bolsones.venta', page = 1)}}">Ver bolsones</a>
@@ -112,24 +112,41 @@
 
 </div>
 
-<div class="container my-5 p-0">
-    <nav aria-label="" class="">
-        <ul class="pagination">
+<div class="my-5">
+  <nav aria-label="...">
+      <ul class="pagination m-0">
+        {% if page > 1 %}
           <li class="page-item">
-            <a class="page-link bg-forms pag-back" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+            <a class="page-link bg-forms pag-back" href="{{url_for('proveedor.ver_productos', page = page - 1)}}" tabindex="-1" aria-disabled="true">Anterior</a>
           </li>
-          <li class="page-item"><a class="page-link bg-contrast" href="#">1</a></li>
-          <li class="page-item" aria-current="page">
-            <a class="page-link bg-forms" href="#">2</a>
-          </li>
-          <li class="page-item">
-              <a class="page-link bg-forms" href="#">3</a>
+        {% else %}
+          <a class="page-link bg-forms pag-back" href="{{url_for('proveedor.ver_productos', page = pages)}}" tabindex="-1" aria-disabled="true">Anterior</a>
+        {% endif %}
+
+        {% for i in range(pages) %}
+          {% if i+1 == page %}
+            <li class="page-item"><a class="page-link bg-contrast" href="{{url_for('proveedor.ver_productos', page = i + 1)}}">{{i+1}}</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link bg-forms" href="{{url_for('proveedor.ver_productos', page = i + 1)}}">{{i+1}}</a></li>
+          {% endif %}
+        {% endfor %}
+
+
+            <li class="page-item">
+
+              {% if page + 1 <= pages %}
+
+                <a class="page-link bg-forms pag-next" href="{{url_for('proveedor.ver_productos', page = page + 1)}}">Siguiente</a>
+
+              {% else %}
+                <a class="page-link bg-forms pag-next" href="{{url_for('proveedor.ver_productos', page = 1)}}">Siguiente</a>
+
+              {% endif %}
+
             </li>
-          <li class="page-item">
-            <a class="page-link bg-forms pag-next" href="#">Siguiente</a>
-          </li>
-        </ul>
-      </nav>
+      </ul>
+
+    </nav>
 </div>
 
 

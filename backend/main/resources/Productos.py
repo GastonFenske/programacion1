@@ -52,7 +52,7 @@ class Productos(Resource):
     # @role_required(roles=['admin', 'proveedor'])
     def get(self):
         page = 1
-        per_page = 10
+        per_page = 8
         productos = db.session.query(ProductoModel)
         if request.get_json():  
             filters = request.get_json().items()

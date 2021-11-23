@@ -48,7 +48,7 @@ class Compras(Resource):
     @role_required(roles=['admin', 'cliente'])
     def get(self):
         page = 1
-        per_page = 10
+        per_page = 8
         compras = db.session.query(CompraModel)  
         if request.get_json():
             filters = request.get_json().items()
@@ -64,7 +64,7 @@ class Compras(Resource):
                 elif key == 'per_page':
                     per_page = int(value)
 
-        compras = compras.paginate(page, per_page, True, 30)
+        compras = compras.paginate(page, per_page, True, 8)
 
         return jsonify({
             'compras': [compra.to_json() for compra in compras.items],

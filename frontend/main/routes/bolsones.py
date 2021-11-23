@@ -91,12 +91,12 @@ def reservar(id: int):
 
 
 
-def cargar_un_bolson(id: int, tipo_bolson: int):
-    bolson = {
-        1: 'bolson-pendiente',
-        2: 'bolson-venta',
-        3: 'bolson-previo'
-    }
+def cargar_un_bolson(id: int):
+    # bolson = {
+    #     1: 'bolson-pendiente',
+    #     2: 'bolson-venta',
+    #     3: 'bolson-previo'
+    # }
     form = BolsonForm()
 
         #Traigo los productos
@@ -117,7 +117,7 @@ def cargar_un_bolson(id: int, tipo_bolson: int):
     form.producto5.choices = productos
     if not form.is_submitted():
         r = requests.get(
-            f'{current_app.config["API_URL"]}/{bolson[tipo_bolson]}/{int(id)}',
+            f'{current_app.config["API_URL"]}/bolson/{int(id)}',
             headers={"content-type": "application/json"},
             auth=BearerAuth(str(request.cookies['access_token']))
         )
@@ -165,14 +165,23 @@ def cargar_un_bolson(id: int, tipo_bolson: int):
 
 @bolsones.route('/editar-bolson/<int:id>')
 def editar_bolson(id):
-    form = cargar_un_bolson(id, 2)
+    form = cargar_un_bolson(id)
     return render_template('editar_bolson.html', bg_color='bg-secondary', title='Editar Bolson', form = form, id = id)
 
 
 
 @bolsones.route('/actualizar-bolson/<int:id>', methods=['POST'])
 def actualizar_bolson(id):
-    form = cargar_un_bolson(id, 2)
+
+    r = requests.get(
+        f'{current_app.config["API_URL"]}/bolson/{id}',
+        headers = {"content-type": "application/json"},
+        auth = BearerAuth(str(request.cookies['access_token']))
+    )
+    bolson = json.loads(r.text)
+    print(bolson["aprobado"])
+    
+    form = cargar_un_bolson(id)
 
     data = {
         "bolsonId": int(id)
@@ -197,7 +206,7 @@ def actualizar_bolson(id):
     r_bolson = requests.put(f'{current_app.config["API_URL"]}/bolson-venta/{id}', headers={"content-type": "application/json"}, json = bolson, auth=BearerAuth(str(request.cookies['access_token'])))
 
     productos = [form.producto.data, form.producto2.data, form.producto3.data, form.producto4.data, form.producto5.data]
-    print(productos, "[PRODUCTOS]")
+    #print(productos, "[PRODUCTOS]")
 
     num = 0
     for producto in productos:

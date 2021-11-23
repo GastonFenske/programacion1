@@ -121,11 +121,11 @@ def bolsones_venta(page: int):
 
     return render_template('verbolsonesventaadmin.html', bg_color = 'bg-dark', bolsones = bolsones, page = page, pages = pages, form = form)
 
-@admin.route('/bolsones-pendientes')
+@admin.route('/bolsones-pendientes/<int:page>')
 @login_required
-def bolsones_pendientes():
+def bolsones_pendientes(page):
     page = {
-        "page": 1
+        "page": page
     }
     r = requests.get(
         f'{current_app.config["API_URL"]}/bolsones-pendientes',
@@ -148,7 +148,8 @@ def eliminar_bolson_pendiente(id):
         auth=BearerAuth(str(request.cookies['access_token']))
     )
     if r.status_code == 204:
-        return redirect(url_for('admin.bolsones_pendientes'))
+        flash('Bolson eliminado exitosamente', 'success')
+        return redirect(url_for('admin.bolsones_pendientes', page = 1))
 
 @admin.route('/vender-bolson/<int:id>')
 @login_required
@@ -163,7 +164,8 @@ def vender_bolson(id):
         auth=BearerAuth(str(request.cookies['access_token']))
     )
     if r.status_code == 201:
-        return redirect(url_for('admin.bolsones_pendientes'))
+        flash('El bolson ahora estara disponible para la venta', 'success')
+        return redirect(url_for('admin.bolsones_pendientes', page = 1))
 
 
 @admin.route('/agregar-bolson', methods=['POST', 'GET'])
@@ -203,7 +205,7 @@ def agregar_bolson():
 
         productos = [form.producto.data, form.producto2.data, form.producto3.data, form.producto4.data, form.producto5.data]
         for producto in productos:
-            if producto != '0':
+            if producto != 0:
                 print('it works')
                 data = {
                     'productoId': producto,
@@ -215,14 +217,15 @@ def agregar_bolson():
                 except:
                     pass
             else:
-                print('it doesnt work')                
+                print('it doesnt work')             
+        flash('El bolson fue agregado con exito', 'success')   
         return redirect(url_for('admin.agregar_bolson'))
 
     return render_template('agregarbolson.html', title='Admin', bg_color='bg-secondary', form = form)
 
-@admin.route('/ver-productos')
+@admin.route('/ver-productos/<int:page>')
 @login_required
-def productos():
+def productos(page):
     form = FilterProductoForm(request.args, meta={'csrf': False})
     data = {
         "per_page": 10
@@ -242,16 +245,16 @@ def productos():
 
 
     data = {
-        'per_page': 15
+        "page": page
     }
 
     if form.submit():
-        print('Funciona cuando tocas')
+        #print('Funciona cuando tocas')
         if form.proveedor.data != None and form.proveedor.data != 0:
             data['usuarioId'] = int(form.proveedor.data)
 
 
-    print(data)
+    #print(data)
 
     r = requests.get(
         f'{current_app.config["API_URL"]}/productos', 
@@ -281,9 +284,9 @@ def eliminar_producto(id):
         return redirect(url_for('admin.productos'))      
 
 
-@admin.route('/compras')
+@admin.route('/compras/<int:page>')
 @login_required
-def compras():
+def compras(page):
 
     filter = FilterCompraForm(request.args, meta={'csrf': False})
 
@@ -298,7 +301,7 @@ def compras():
     filter.status.choices = compras
 
     data = {
-        "per_page": 10
+        "page": page
     }
 
     if filter.submit():
@@ -313,7 +316,7 @@ def compras():
     page = json.loads(r.text)['page']
     pages = json.loads(r.text)['pages']
 
-    return render_template('compras_admin.html', bg_color = 'bg-dark', title = 'Panel Admin', compras = compras, filter = filter)
+    return render_template('compras_admin.html', bg_color = 'bg-dark', title = 'Panel Admin', compras = compras, filter = filter, page = page, pages = pages)
 
 @admin.route('/compra/<int:id>')
 @login_required
@@ -354,7 +357,8 @@ def bolson_retirado(id):
     )
 
     if r.status_code == 201:
-        return redirect(url_for('admin.compras'))
+        flash('La compra ha sido entregada exitosamente', 'success')
+        return redirect(url_for('admin.compras', page = 1))
     else:
         return f'<h1>{r.status_code}</h1>'
 
