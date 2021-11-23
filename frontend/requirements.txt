@@ -4,5 +4,6 @@ flask-restful
 requests
 flask-login
 flask_wtf
+wtforms == 2.3.3
 email_validator
 PyJWT

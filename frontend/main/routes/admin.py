@@ -19,12 +19,12 @@ def home():
     return render_template('homeadmin.html', title='Admin', bg_color="bg-dark")
 
 
-@admin.route('/agregar-proveedor')
+@admin.route('/agregar-proveedor/<int:page>')
 @login_required
-def agregar_proveedor():
+def agregar_proveedor(page):
 
     page = {
-        "page": 1
+        "page": page
     }
     r = requests.get(f'{current_app.config["API_URL"]}/usuarios', headers={"content-type": "application/json"}, json=page, auth=BearerAuth(str(request.cookies['access_token'])))
 
@@ -46,7 +46,9 @@ def add_proveedor(id):
     }
 
     r = requests.put(f'{current_app.config["API_URL"]}/usuario/{id}', headers={"content-type": "application/json"}, json = json, auth=BearerAuth(str(request.cookies['access_token'])))
-    return redirect(url_for('admin.agregar_proveedor'))
+    if r.status_code == 201:
+        flash('El proveedor ha sido agregado con exito', 'success')
+        return redirect(url_for('admin.agregar_proveedor'))
 
 @admin.route('/remove-proveedor/<int:id>')
 @login_required
@@ -56,6 +58,7 @@ def remove_proveedor(id):
     }
     r = requests.put(f'{current_app.config["API_URL"]}/usuario/{id}', headers={"content-type": "application/json"}, json = json, auth=BearerAuth(str(request.cookies['access_token'])))
     if r.status_code == 201:
+        flash('Proveedor removido con exito', 'success')
         return redirect(url_for('admin.agregar_proveedor'))
     flash('El proveedor no puede ser removido porque contiene uno o mas productos', 'danger')
     return redirect(url_for('admin.agregar_proveedor'))
