@@ -5,9 +5,9 @@ window.onload=function(){
 
     //agarra el producto numero dos, el div completo donde esta el select y el boton de trash
     var producto2 = document.getElementById('producto2')
-
-
     var producto3 = document.getElementById('producto3')
+
+
     var producto4 = document.getElementById('producto4')
     var producto5 = document.getElementById('producto5')
 
@@ -16,20 +16,26 @@ window.onload=function(){
     var select4 = document.getElementById('select4')
     var select5 = document.getElementById('select5')
 
+    //producto2.style.display = 'none'
+    //producto3.style.display = 'none'
+
+
+    //producto4.style.display = 'none'
+    //producto5.style.display = 'none'
 
     //boton para sacarle el hidden al add producto 2
     var addProducto2 = document.getElementById('add-producto2')
-
-
     var addProducto3 = document.getElementById('add-producto3')
+
+
     var addProducto4 = document.getElementById('add-producto4')
     var addProducto5 = document.getElementById('add-producto5')
 
     //event listener del add producto2
     addProducto2.addEventListener('click', agregarProducto2)
+    addProducto3.addEventListener('click', agregarProducto3)
 
     
-    addProducto3.addEventListener('click', agregarProducto3)
     addProducto4.addEventListener('click', agregarProducto4)
     addProducto5.addEventListener('click', agregarProducto5)
 
@@ -115,13 +121,16 @@ window.onload=function(){
     function cargar(){
         fetch('http://127.0.0.1:8000/bolsones-venta').then(res=>res.json())
         .then(res=>{
-
+            // console.log(res)
+            // console.log(res.bolsonesventa)
+            // console.log(res.bolsonesventa[0])
+            // console.log(res.bolsonesventa[0].imagen)
             var bolsonesventa = res.bolsonesventa
             document.getElementById('divPrincipal').innerHTML="";
             
             
             for (var i in bolsonesventa){
-
+                //console.log(bolsonesventa[i])
                 
                 var contenido='<div class="card mt-2" style="width: 18rem;">'
                 contenido+=`<img src="${bolsonesventa[i].imagen}" class="card-img-top" alt="..."`
@@ -138,6 +147,7 @@ window.onload=function(){
     }
 
     function imprimir(){
+        //console.log('pvto')
         cargar()
     }
 

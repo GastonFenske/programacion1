@@ -33,7 +33,18 @@
 
   <div class="container">
 
-    <div class="main bg-forms p-5 rounded my-5">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+     {% endif %}
+    {% endwith %}
+
+    <div class="main bg-forms p-5 rounded my-4">
 
 
         <div class="row d-flex justify-content-center">
@@ -128,6 +139,17 @@
 
             {% else %}
 
+              <div class="mb-3 hidden" id="producto2">
+                <label for="">Producto #2</label>
+                <div class="d-flex">
+
+                    {{ show_field_no_label(form.producto2, class='form-control form-select input', id = 'select2') }}
+                    <button type="button" class="btn btn-secondary ms-3 px-4" id="trash-2">
+                        <i class="fas fa-trash-alt"></i>
+                    </button> 
+                </div>
+              </div>
+
               <div class="d-grid mb-3" id="add-producto2">
                 <button type="button" class="btn btn-success mt-4" id="add-bolson">
                     Agregar producto
@@ -155,6 +177,29 @@
               </button>
             </div>
             {% else %}
+
+            <div class="mb-3 hidden" id="producto3">
+              <label for="">Producto #3</label>
+              <div class="d-flex">
+
+                  {{ show_field_no_label(form.producto3, class='form-control form-select input', id = 'select3') }}
+                  <button type="button" class="btn btn-secondary ms-3 px-4" id="trash-3">
+                      <i class="fas fa-trash-alt"></i>
+                  </button> 
+              </div>
+            </div>
+
+            <div class="mb-3 hidden" id="producto3">
+              <label for="">Producto #3</label>
+              <div class="d-flex">
+
+                  {{ show_field_no_label(form.producto3, class='form-control form-select input', id = 'select3') }}
+                  <button type="button" class="btn btn-secondary ms-3 px-4" id="trash-3">
+                      <i class="fas fa-trash-alt"></i>
+                  </button> 
+              </div>
+            </div>
+
 
               <div class="d-grid mb-3" id="add-producto3">
                 <button type="button" class="btn btn-success mt-4" id="add-bolson">
@@ -184,6 +229,16 @@
               </div>
 
             {% else %}
+
+            <div class="mb-3 hidden" id="producto4">
+              <label for="">Producto #4</label>
+              <div class="d-flex">
+                  {{ show_field_no_label(form.producto4, class='form-control form-select input', id = 'select4') }}
+                  <button type="button" class="btn btn-secondary ms-3 px-4" id="trash-4">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>  
+              </div>
+            </div>
 
             <div class="d-grid mb-3" id="add-producto4">
               <button type="button" class="btn btn-success mt-4" id="add-bolson">
@@ -215,7 +270,16 @@
               </div>
 
             {% else %}
-
+              
+              <div class="mb-3 hidden" id="producto5">
+                <label for="">Agregar producto #5</label>
+                <div class="d-flex">
+                  {{ show_field_no_label(form.producto5, class='form-control form-select input', id = 'select5') }}
+                  <button type="button" class="btn btn-secondary ms-3 px-4" id="trash-5">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>  
+                </div>
+              </div>
 
               <div class="d-grid mb-3" id="add-producto5">
                 <button type="button" class="btn btn-success mt-4" id="add-bolson">

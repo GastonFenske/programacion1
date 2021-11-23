@@ -3,6 +3,7 @@ from flask import request, jsonify
 from .. import db
 from main.models import BolsonModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from main.auth.decorators import role_required
 
 
 class BolsonVenta(Resource):
@@ -13,6 +14,21 @@ class BolsonVenta(Resource):
             return bolsonventa.to_json()
         else:
             return '', 404
+
+    @role_required(roles=['admin'])
+    def put(self, id):
+        bolsonventa = db.session.query(BolsonModel).get_or_404(id)
+        data = request.get_json().items()
+        if bolsonventa.aprobado == 1:
+            for key, value in data:
+                setattr(bolsonventa, key, value)
+            db.session.add(bolsonventa)
+            db.session.commit()
+            return bolsonventa.to_json(), 201
+        else:
+            return '', 404
+
+
 
 class BolsonesVenta(Resource):
     @jwt_required(optional=True)
@@ -35,3 +51,5 @@ class BolsonesVenta(Resource):
             'pages': bolsones.pages,
             'page': page
         })
+
+

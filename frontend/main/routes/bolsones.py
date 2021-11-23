@@ -89,6 +89,8 @@ def reservar(id: int):
         flash('El bolson fue reservado con exito', 'success')
         return redirect(url_for('cliente.compras'))
 
+
+
 def cargar_un_bolson(id: int, tipo_bolson: int):
     bolson = {
         1: 'bolson-pendiente',
@@ -135,6 +137,7 @@ def cargar_un_bolson(id: int, tipo_bolson: int):
 
         #Tengo los productos que ya tiene ese bolson
         productos = json.loads(r.text)["productosbolsones"]
+
         # print(productos)
         #productos = [p['producto']['nombre'] for p in productos]
 
@@ -167,9 +170,23 @@ def editar_bolson(id):
 
 
 
-@bolsones.route('/actualizar-bolson/<int:id>')
+@bolsones.route('/actualizar-bolson/<int:id>', methods=['POST'])
 def actualizar_bolson(id):
     form = cargar_un_bolson(id, 2)
+
+    data = {
+        "bolsonId": int(id)
+    }
+
+    r = requests.get(
+        f'{current_app.config["API_URL"]}/productos-bolsones',
+        headers = {"content-type": "application/json"},
+        json = data
+    )
+    productos = json.loads(r.text)["productosbolsones"]
+    productos_ids = [producto["id"] for producto in productos]
+    print(productos_ids, "[PRODUCTOS IDS]")
+
     bolson = {
         'nombre': form.nombre.data,
         'aprobado': form.venta.data,
@@ -177,23 +194,56 @@ def actualizar_bolson(id):
         'descripcion': form.descripcion.data
     }
 
-    r_bolson = requests.put(f'{current_app.config["API_URL"]}/bolsones-pendientes', headers={"content-type": "application/json"}, json = bolson, auth=BearerAuth(str(request.cookies['access_token'])))
+    r_bolson = requests.put(f'{current_app.config["API_URL"]}/bolson-venta/{id}', headers={"content-type": "application/json"}, json = bolson, auth=BearerAuth(str(request.cookies['access_token'])))
 
     productos = [form.producto.data, form.producto2.data, form.producto3.data, form.producto4.data, form.producto5.data]
+    print(productos, "[PRODUCTOS]")
+
+    num = 0
     for producto in productos:
-        if producto != '0':
-            print('Esta actualizando los productos')
+        if producto != 0:
+
             data = {
                 'productoId': producto,
                 'bolsonId': int(id)
             }
             try:
-                r = requests.put(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json=data, auth=BearerAuth(str(request.cookies['access_token'])))
+
+                r = requests.put(
+                    f'{current_app.config["API_URL"]}/producto-bolson/{productos_ids[productos.index(producto)]}', 
+                    headers={"content-type": "application/json"}, 
+                    json=data, 
+                    auth=BearerAuth(str(request.cookies['access_token']))
+                )
 
             except:
-                pass
+                data = {
+                    "productoId": producto,
+                    "bolsonId": int(id)
+                }
+                #print(data, "[DATA]")
+                r = requests.post(
+                    f'{current_app.config["API_URL"]}/productos-bolsones',
+                    headers = {"content-type": "application/json"},
+                    json = data,
+                    auth = BearerAuth(str(request.cookies['access_token']))
+                )
+            num += 1
         else:
-            print('No esta actualizando los productos')
+            try:
+                #print(productos.index(producto), "[INDEX]")
+                #print(productos_ids[productos.index(producto)], "[PRODUCTO-BOLSON A ELIMINAR]")
+                r = requests.delete(
+                    f'{current_app.config["API_URL"]}/producto-bolson/{productos_ids[num]}',
+                    headers = {"content-type": "application/json"}
+                )
+                num += 1
+            except:
+                pass
+
+            
+
 
     if r_bolson.status_code == 201:
+        flash('El bolson ha sido actualizado exitosamente', 'success')
         return redirect(url_for('bolsones.editar_bolson', id = id))
