@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, Blueprint, current_app
+from flask import redirect, render_template, url_for, Blueprint, current_app, flash
 from flask.globals import request
 from flask.templating import render_template_string
 import requests, json
@@ -30,16 +30,6 @@ def traer_bolsones(page: int):
 def venta(page):
 
     bolsones, page, pages = traer_bolsones(page)
-
-    # page = {
-    #     "page": int(page)
-    # }
-
-    # r = requests.get(f'{current_app.config["API_URL"]}/bolsones-venta', headers={"content-type": "application/json"}, json=page)
-
-    # bolsones = json.loads(r.text)["bolsonesventa"]
-    # page = json.loads(r.text)["page"]
-    # pages = json.loads(r.text)["pages"]
 
     return render_template('bolsoneshome.html', bg_color='bg-secondary', title='Bolsones', bolsones = bolsones, page = page, pages = pages)
 
@@ -96,6 +86,7 @@ def reservar(id: int):
         auth= BearerAuth(str(request.cookies['access_token']))
     )
     if r.status_code == 201:
+        flash('El bolson fue reservado con exito', 'success')
         return redirect(url_for('cliente.compras'))
 
 def cargar_un_bolson(id: int, tipo_bolson: int):
@@ -172,9 +163,37 @@ def cargar_un_bolson(id: int, tipo_bolson: int):
 @bolsones.route('/editar-bolson/<int:id>')
 def editar_bolson(id):
     form = cargar_un_bolson(id, 2)
-    return render_template('editar_bolson.html', bg_color='bg-secondary', title='Editar Bolson', form = form)
+    return render_template('editar_bolson.html', bg_color='bg-secondary', title='Editar Bolson', form = form, id = id)
+
+
 
 @bolsones.route('/actualizar-bolson/<int:id>')
 def actualizar_bolson(id):
-    pass
+    form = cargar_un_bolson(id, 2)
+    bolson = {
+        'nombre': form.nombre.data,
+        'aprobado': form.venta.data,
+        'imagen': form.imagen.data,
+        'descripcion': form.descripcion.data
+    }
 
+    r_bolson = requests.put(f'{current_app.config["API_URL"]}/bolsones-pendientes', headers={"content-type": "application/json"}, json = bolson, auth=BearerAuth(str(request.cookies['access_token'])))
+
+    productos = [form.producto.data, form.producto2.data, form.producto3.data, form.producto4.data, form.producto5.data]
+    for producto in productos:
+        if producto != '0':
+            print('Esta actualizando los productos')
+            data = {
+                'productoId': producto,
+                'bolsonId': int(id)
+            }
+            try:
+                r = requests.put(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json=data, auth=BearerAuth(str(request.cookies['access_token'])))
+
+            except:
+                pass
+        else:
+            print('No esta actualizando los productos')
+
+    if r_bolson.status_code == 201:
+        return redirect(url_for('bolsones.editar_bolson', id = id))

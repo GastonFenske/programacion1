@@ -1,4 +1,4 @@
-from flask import blueprints, redirect, render_template, url_for, Blueprint, current_app, request
+from flask import blueprints, redirect, render_template, url_for, Blueprint, current_app, request, flash
 from main.forms import PerfilForm
 from .bolsones import traer_bolsones
 import requests, json
@@ -79,7 +79,38 @@ def cargar_un_perfil(id: int):
 @cliente.route('/perfil/<int:id>', methods=['POST', 'GET'])
 def perfil(id):
     form = cargar_un_perfil(id)
-    return render_template('editarperfil.html', bg_color = 'bg-secondary', form = form, title='Bolsones Store')
+    return render_template('editarperfil.html', bg_color = 'bg-secondary', form = form, title='Bolsones Store', id = id)
+
+@cliente.route('/actualizar-perfil/<int:id>', methods=['POST'])
+def actualizar_perfil(id):
+    form = cargar_un_perfil(id)    
+    usuario = {
+        "nombre": form.nombre.data,
+        "apellido": form.apellido.data,
+        "telefono": form.telefono.data,
+        "mail": form.email.data
+    }
+    r = requests.put(f'{current_app.config["API_URL"]}/usuario/{id}', headers={"content-type": "application/json"}, json = usuario, auth=BearerAuth(str(request.cookies['access_token'])))
+
+    data = {
+        "current_password": form.current_password.data,
+        "new_password": form.new_password.data
+    }
+    if form.new_password.data != '':
+        r_password = requests.post(
+            f'{current_app.config["API_URL"]}/auth/change-password/{id}',
+            headers = {"content-type": "application/json"},
+            json = data
+        )
+        if r_password.status_code == 401:
+            flash('La contraseña actual ingresada no es correcta', 'danger')
+            return redirect(url_for('cliente.perfil', id = id))
+        elif r_password.status_code == 201:
+            flash('La contraseña fue actualizada satisfactoriamente', 'success')
+
+    if r.status_code == 201:
+        flash('Los datos del perfil fueron actualizados satisfactoriamente', 'info')
+        return redirect(url_for('cliente.perfil', id = id))
 
 
 @cliente.route('/reservar-bolson/<int:id>')

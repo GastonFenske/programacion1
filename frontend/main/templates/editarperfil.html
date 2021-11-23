@@ -62,6 +62,17 @@
 
 <div class="container">
 
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+  {% endif %}
+  {% endwith %}
+
     <div class="main bg-forms p-5 rounded my-5">
 
 
@@ -73,7 +84,7 @@
     
         </div>
     
-        <form class="row d-flex justify-content-center">
+        <form class="row d-flex justify-content-center" method="POST" action="{{ url_for('cliente.actualizar_perfil', id = id) }}">
     
             <!-- <div class="bg-secondary"> -->
     

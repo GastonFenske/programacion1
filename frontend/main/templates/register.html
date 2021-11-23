@@ -29,74 +29,85 @@
 
     <div class="container">
 
-      <div class="row d-flex justify-content-center my-4">
-          <div class="bg-forms p-5 rounded col-md-4 col-10">
-              <div class="d-flex justify-content-center">
-                  <h3>Registrarse</h3>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
-              <form class="pt-3" action="{{ url_for('main.register') }}" method="POST">
+            {% endfor %}
+         {% endif %}
+      {% endwith %}
 
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                  <div class="mb-3">
-                    <!-- <label for="exampleInputEmail1" class="form-label">Nombre</label>
-                    <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu nombre"> -->
+        <div class="main bg-forms p-5 rounded my-5">
 
-                    {{ show_field(form.nombre, class='form-control', placeholder='Ingresa tu nombre') }}
+            <div class="row d-flex justify-content-center">
 
-                  </div>
+                <div class="col-md-12 d-flex justify-content-center mb-3">
+                    <h3>Registrarse</h3>
+                </div>
+        
+            </div>
 
-                  <div class="mb-3">
-                      <!-- <label for="exampleInputEmail1" class="form-label">Apellido</label>
-                      <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu apellido"> -->
+            <form class="row d-flex justify-content-center" action="{{ url_for('main.register') }}" method="POST">
 
-                      {{ show_field(form.apellido, class='form-control', placeholder='Ingresa tu apellido') }}
+                <div class="col-md-6">
 
-                  </div>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        
+                    <div class="mb-3">
+                        {{ show_field(form.nombre, class='form-control', placeholder='Ingresa tu nombre') }}
+                    </div>
+        
+                    <div class="mb-3">
+                        {{ show_field(form.apellido, class='form-control', placeholder='Ingresa tu apellido') }}
+                    </div>
+        
+                    <div class="mb-3">
+                        {{ show_field(form.telefono, class='form-control', placeholder='Ingresa tu telefono') }}
+                    </div>
+        
 
-                  <div class="mb-3">
-                      <!-- <label for="exampleInputEmail1" class="form-label">Telefono</label>
-                      <input type="phone-number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu telefono"> -->
-
-                      {{ show_field(form.telefono, class='form-control', placeholder='Ingresa tu telefono') }}
-
-                  </div>
-
-                  <div class="mb-3">
-                      <!-- <label for="exampleInputEmail1" class="form-label">Email</label>
-                      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa tu email"> -->
-
-                      {{ show_field(form.email, class='form-control', placeholder='Ingresa tu email') }}
-
-                  </div>
-
-                  <div class="mb-3">
-                    <!-- <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Ingresa tu password"> -->
-
-                    {{ show_field(form.password, class='form-control', placeholder='Ingresa tu password') }}
-
-                  </div>
-
-                  <div class="mb-3">
-                      <!-- <label for="exampleInputEmail1" class="form-label">Confirm Password</label>
-                      <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Confirma tu password"> -->
-
-                      {{ show_field(form.confirm, class='form-control', placeholder='Confirma tu password') }}
-
-                  </div>
-
-                  <div class="d-grid pt-3">
-                      <!-- <button type="submit" class="btn btn-primary">Registrarse</button> -->
-
-                      {{ show_submit(form.submit, class='btn btn-primary') }}
-
-                  </div>
-
-                </form>
-          </div>
-      </div>
+        
+                </div>
 
 
+                <div class="col-md-6">
+
+                    <div class="mb-3">
+                        {{ show_field(form.email, class='form-control', placeholder='Ingresa tu email') }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ show_field(form.password, class='form-control', placeholder='Ingresa tu password') }}
+                      </div>
+                
+                      <div class="mb-3">
+   
+                        {{ show_field(form.confirm, class='form-control', placeholder='Confirma tu password') }}
+                      </div>
+                
+                      <div class="mb-3">
+
+
+                      </div>
+                
+
+        
+                </div>
+
+                <div class="col-md-12">
+                    <div class="d-grid pt-4">
+                        {{ show_submit(form.submit, class='btn btn-primary') }}
+                      </div>
+                </div>
+
+        
+            </form>
+        
+        </div>
+        
     </div>
-
+            
 {% endblock %}

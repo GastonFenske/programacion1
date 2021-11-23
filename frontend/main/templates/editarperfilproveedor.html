@@ -33,21 +33,16 @@
 
 <div class="container">
 
-    <!-- <div class="bg-forms p-5 rounded">
-
-    <div class="row d-flex justify-content-center my-5">
-
-        <div class="d-flex justify-content-center">
-            <h3>Editar perfil</h3>
-        </div>
-
-
-        </div>
-
-
-        </div>
-
-    </div> -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+     {% endif %}
+  {% endwith %}
 
     <div class="main bg-forms p-5 rounded my-5">
 
@@ -118,42 +113,3 @@
 </div>
 
 {% endblock %}
-
-<!-- <form class="pt-3">
-
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-
-    <div class="mb-3">
-    {{ show_field(form.nombre, class='form-control', value='Gaston') }}
-    </div>
-
-    <div class="mb-3">
-        {{ show_field(form.apellido, class='form-control', value='Fenske') }}
-    </div>
-
-    <div class="mb-3">
-        {{ show_field(form.telefono, class='form-control', value='2604267316') }}
-    </div>
-
-    <div class="mb-3">
-        {{ show_field(form.email, class='form-control', value='s.fenske@alumno.um.edu.ar') }}
-    </div>
-
-
-    <div class="mb-3">
-        {{ show_field(form.new_password, class='form-control', placeholder='Ingrese su nueva contraseña') }}
-      </div>
-
-      <div class="mb-3">
-          {{ show_field(form.new_confirm, class='form-control', placeholder='Confirme su nueva contraseña') }}
-      </div>
-
-      <div class="mb-3">
-          {{ show_field(form.current_password, class='form-control', placeholder='Ingrese su contraseña actual') }}
-      </div>
-
-      <div class="d-grid pt-3">
-          {{ show_submit(form.submit, class='btn btn-primary') }}
-      </div>
-
-</form> -->

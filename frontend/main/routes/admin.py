@@ -55,23 +55,17 @@ def remove_proveedor(id):
         'role': 'cliente'
     }
     r = requests.put(f'{current_app.config["API_URL"]}/usuario/{id}', headers={"content-type": "application/json"}, json = json, auth=BearerAuth(str(request.cookies['access_token'])))
+    if r.status_code == 201:
+        return redirect(url_for('admin.agregar_proveedor'))
+    flash('El proveedor no puede ser removido porque contiene uno o mas productos', 'danger')
     return redirect(url_for('admin.agregar_proveedor'))
-
-    
-
-# class BearerAuth(requests.auth.AuthBase):
-#     def __init__(self, token):
-#         self.token = token
-#     def __call__(self, r):
-#         r.headers["authorization"] = "Bearer " + self.token
-#         return r 
 
 
 @admin.route('/perfil/<int:id>', methods=['POST', 'GET'])
 @login_required
 def editar_perfil(id):
     form = cargar_un_perfil(id)
-    print(form.nombre.data)
+    #print(form.nombre.data)
     return render_template('editarperfiladmin.html', title='Admin', bg_color='bg-secondary', form = form, id = id)
 
 
@@ -87,9 +81,28 @@ def actualizar_perfil(id):
     }
     r = requests.put(f'{current_app.config["API_URL"]}/usuario/{id}', headers={"content-type": "application/json"}, json = usuario, auth=BearerAuth(str(request.cookies['access_token'])))
 
-    if r.status_code == 201:
+    data = {
+        "current_password": form.current_password.data,
+        "new_password": form.new_password.data
+    }
+    if form.new_password.data != '':
+        r_password = requests.post(
+            f'{current_app.config["API_URL"]}/auth/change-password/{id}',
+            headers = {"content-type": "application/json"},
+            json = data
+        )
+        if r_password.status_code == 401:
+            flash('La contraseña actual ingresada no es correcta', 'danger')
+            return redirect(url_for('admin.editar_perfil', id = id))
+        elif r_password.status_code == 201:
+            flash('La contraseña fue actualizada satisfactoriamente', 'success')
 
+    if r.status_code == 201:
+        flash('Los datos del perfil fueron actualizados satisfactoriamente', 'info')
         return redirect(url_for('admin.editar_perfil', id = id))
+
+
+
 
 @admin.route('/bolsones-venta/<int:page>')
 @login_required
@@ -194,8 +207,7 @@ def agregar_bolson():
                 print('it works')
                 data = {
                     'productoId': producto,
-                    'bolsonId': int(bolsonId),
-                    'cantidad': 15
+                    'bolsonId': int(bolsonId)
                 }
                 try:
                     r = requests.post(f'{current_app.config["API_URL"]}/productos-bolsones', headers={"content-type": "application/json"}, json=data, auth=BearerAuth(str(request.cookies['access_token'])))

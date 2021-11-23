@@ -25,6 +25,27 @@ def login():
     else:
         return 'Incorret password', 401
 
+@auth.route('/change-password/<int:id>', methods=['POST'])
+def change_password(id):
+
+    usuario = db.session.query(UsuarioModel).get_or_404(id)
+    if usuario.validate_pass(request.get_json().get("current_password")):
+        #usuario.password = request.get_json().get("new_password")
+        #usuario.plain_password(request.get_json().get("new_password"))
+        usuario.plain_password = request.get_json().get("new_password")
+
+        try:
+            db.session.add(usuario)
+            db.session.commit()
+        except Exception as error:
+            db.session.rollback()
+            return str(error), 409
+        return usuario.to_json(), 201
+    else:
+        return 'Incorret password', 401
+
+
+
 @auth.route('/register', methods=['POST'])
 def register():
 

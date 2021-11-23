@@ -26,7 +26,12 @@ def register():
             f'{current_app.config["API_URL"]}/auth/register', json=user
         )
         if r.status_code == 201:
+            flash(f'¡Felicitaciones {user["nombre"]} te has registrado exitosamente! Por favor inicia sesion para continuar', 'success')
             return redirect(url_for('main.login'))
+        elif r.status_code == 409:
+            flash(f'Ya existe una cuenta creada con el email {user["mail"]}', 'info')
+            return redirect(url_for('main.register'))
+
 
     return render_template('register.html', title='Register', bg_color="bg-secondary", form = form)
 
@@ -62,7 +67,8 @@ def login():
                 print(current_user.email, 'email del current user')
             return req
         else:
-            flash("Usuario o contraseña incorrecta")
+            flash('Correo o contraseña incorrectos', 'danger')
+            return redirect(url_for('main.login'))
 
     return render_template('login.html', title='Login', bg_color="bg-secondary", form = form)
 

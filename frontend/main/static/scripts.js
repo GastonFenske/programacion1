@@ -3,22 +3,32 @@ window.onload=function(){
     //var btn = document.getElementById('btn-refresh')
     //btn.addEventListener('click', imprimir)
 
+    //agarra el producto numero dos, el div completo donde esta el select y el boton de trash
     var producto2 = document.getElementById('producto2')
+
+
     var producto3 = document.getElementById('producto3')
     var producto4 = document.getElementById('producto4')
     var producto5 = document.getElementById('producto5')
 
-    producto2.style.display = 'none'
-    producto3.style.display = 'none'
-    producto4.style.display = 'none'
-    producto5.style.display = 'none'
+    var select2 = document.getElementById('select2')
+    var select3 = document.getElementById('select3')
+    var select4 = document.getElementById('select4')
+    var select5 = document.getElementById('select5')
 
+
+    //boton para sacarle el hidden al add producto 2
     var addProducto2 = document.getElementById('add-producto2')
+
+
     var addProducto3 = document.getElementById('add-producto3')
     var addProducto4 = document.getElementById('add-producto4')
     var addProducto5 = document.getElementById('add-producto5')
 
+    //event listener del add producto2
     addProducto2.addEventListener('click', agregarProducto2)
+
+    
     addProducto3.addEventListener('click', agregarProducto3)
     addProducto4.addEventListener('click', agregarProducto4)
     addProducto5.addEventListener('click', agregarProducto5)
@@ -33,74 +43,68 @@ window.onload=function(){
     trash4.addEventListener('click', removeProducto4)
     trash5.addEventListener('click', removeProducto5)
 
-    function removeProducto2(){
-
-        lista = [producto2, addProducto2]
-        lista[0].style.display = 'none'
-        lista[1].classList.remove('ocultar')
-    }
-
-    function removeProducto3(){
-
-        lista = [producto3, addProducto3]
-        lista[0].style.display = 'none'
-        lista[1].classList.remove('ocultar')
-    }
-
-    function removeProducto4(){
-
-        lista = [producto4, addProducto4]
-        lista[0].style.display = 'none'
-        lista[1].classList.remove('ocultar')
-    }
-
-    function removeProducto5(){
-
-        lista = [producto5, addProducto5]
-        lista[0].style.display = 'none'
-        lista[1].classList.remove('ocultar')
-    }
-
-    // function agregarProducto(key){
-    //     dic = {
-    //         2: [producto2, addProducto2],
-    //         3: [producto3, addProducto3],
-    //         4: [producto4, addProducto4],
-    //         5: [producto5, addProducto5]
-    //     };
-    //     dic[key][0].style.display = 'block'
-    //     dic[key][1].classList.add('ocultar')
-    // }
-
-
     function agregarProducto2(){
 
         lista = [producto2, addProducto2]
-        lista[0].style.display = 'block'
-        lista[1].classList.add('ocultar')
+        //lista[0].style.display = 'block'
+        lista[0].classList.remove('hidden')
+        lista[1].classList.add('hidden')
         
 
+    }
+
+    function removeProducto2(){
+
+        lista = [producto2, addProducto2]
+        lista[0].classList.add('hidden')
+        lista[1].classList.remove('hidden')
+        select2.value = 0
     }
 
 
     function agregarProducto3(){
 
         lista = [producto3, addProducto3]
-        lista[0].style.display = 'block'
-        lista[1].classList.add('ocultar')
+        lista[0].classList.remove('hidden')
+        lista[1].classList.add('hidden')
+    }
+
+    function removeProducto3(){
+
+        lista = [producto3, addProducto3]
+        lista[0].classList.add('hidden')
+        lista[1].classList.remove('hidden')
+        select3.value = 0
     }
 
     function agregarProducto4(){
 
         lista = [producto4, addProducto4]
-        lista[0].style.display = 'block'
-        lista[1].classList.add('ocultar')
+        lista[0].classList.remove('hidden')
+        lista[1].classList.add('hidden')
     }
+
+    function removeProducto4(){
+
+        lista = [producto4, addProducto4]
+        lista[0].classList.add('hidden')
+        lista[1].classList.remove('hidden')
+        select4.value = 0
+    }
+
     function agregarProducto5(){
 
         lista = [producto5, addProducto5]
-        lista[0].style.display = 'block'
-        lista[1].classList.add('ocultar')
+        lista[0].classList.remove('hidden')
+        lista[1].classList.add('hidden')
+    }
+
+    function removeProducto5(){
+
+        lista = [producto5, addProducto5]
+        lista[0].classList.add('hidden')
+        lista[1].classList.remove('hidden')
+        select5.value = 0
     }
 
 
@@ -111,16 +115,13 @@ window.onload=function(){
     function cargar(){
         fetch('http://127.0.0.1:8000/bolsones-venta').then(res=>res.json())
         .then(res=>{
-            // console.log(res)
-            // console.log(res.bolsonesventa)
-            // console.log(res.bolsonesventa[0])
-            // console.log(res.bolsonesventa[0].imagen)
+
             var bolsonesventa = res.bolsonesventa
             document.getElementById('divPrincipal').innerHTML="";
             
             
             for (var i in bolsonesventa){
-                //console.log(bolsonesventa[i])
+
                 
                 var contenido='<div class="card mt-2" style="width: 18rem;">'
                 contenido+=`<img src="${bolsonesventa[i].imagen}" class="card-img-top" alt="..."`
@@ -137,7 +138,6 @@ window.onload=function(){
     }
 
     function imprimir(){
-        //console.log('pvto')
         cargar()
     }
 
